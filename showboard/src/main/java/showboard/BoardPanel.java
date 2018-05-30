@@ -86,6 +86,7 @@ class BoardPanel extends JPanel implements Observer {
         super();
         this.pawns = new ArrayList<>();
         this.noImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        this.setDimension(new Dimension(700,700));
         final Graphics2D graphics = this.noImage.createGraphics();
         graphics.setColor(Color.darkGray);
         graphics.fillRect(0, 0, 2, 2);
