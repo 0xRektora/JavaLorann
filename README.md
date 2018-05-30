@@ -1,2 +1,2 @@
 # JavaLorann
-Exia Lorann java prokect
+Exia Lorann java project
