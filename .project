@@ -5,6 +5,7 @@
 	<projects>
 		<project>contract</project>
 		<project>controller</project>
+		<project>Element</project>
 		<project>ExiaEngine</project>
 		<project>main</project>
 		<project>model</project>

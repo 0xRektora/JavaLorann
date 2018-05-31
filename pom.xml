@@ -6,7 +6,6 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>lorann</name>
-  <description>Base project to start BoulderDash software</description>
   <build>
     <plugins>
       <plugin>
@@ -27,9 +26,10 @@
     <module>view</module>
     <module>main</module>
     <module>showboard</module>
-    <module>ExiaEngine</module>
-    <module>org.ExiaEngine</module>
-    <module>Element</module>
+    
+    
+    
+    
   </modules>
   <reporting>
     <plugins>
@@ -75,5 +75,11 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    	<groupId>fr.exia</groupId>
+    	<artifactId>Element</artifactId>
+    	<version>0.0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
+  <description>Loran game engine</description>
 </project>
