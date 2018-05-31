@@ -1,11 +1,12 @@
 package MotionElement;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Enemies extends Pawn {
 	/** A list containing the entire sprites.*/
-	private List<String> enemySprites;
+	private List<String> enemySprites = new ArrayList<String>();;
 	
 	/** The enemy constructor*/
 	public Enemies() {
@@ -17,11 +18,11 @@ public class Enemies extends Pawn {
 	 * Adding the sprites to the list.
 	 */
 	public void addSprite() {
-		this.enemySprites.add("monster_1.png");
-		this.enemySprites.add("monster_2.png");
-		this.enemySprites.add("monster_3.png");
-		this.enemySprites.add("monster_4.png");
-		this.enemySprites.add("monster_5.png");
+		this.enemySprites.add("../sprite/monster_1.png");
+		this.enemySprites.add("../sprite/monster_2.png");
+		this.enemySprites.add("../sprite/monster_3.png");
+		this.enemySprites.add("../sprite/monster_4.png");
+		this.enemySprites.add("../sprite/monster_5.png");
 	}
 	
 	/**Randomizer of the sprite selector

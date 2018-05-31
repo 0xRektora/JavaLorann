@@ -3,6 +3,7 @@
 	<name>contract</name>
 	<comment></comment>
 	<projects>
+		<project>Element</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

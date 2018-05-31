@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>org.ExiaEngine</artifactId>
-  <name>lorann.org.ExiaEngine</name>
+  <name>org.ExiaEngine</name>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
