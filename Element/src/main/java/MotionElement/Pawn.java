@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -11,6 +12,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public abstract class Pawn {
+
+	/** The list of all pawns */
+	private static List<Pawn> pawns = new ArrayList<Pawn>();
+
 	/** The X position of the pawn */
 	private int x;
 
@@ -41,20 +46,26 @@ public abstract class Pawn {
 	/** Index of the sprite */
 	private int spriteIndex = 0;
 
-	private boolean isAnimating;
-
 	private Spell spell;
 
 	private Direction pdirection = Direction.DOWN;
 
-	private Boolean canShoot = false;
-	
+	private boolean canShoot = false;
+
 	private boolean haveSpell = true;
+
+	private Status status;
+
 	/** Thread of the animation */
 	private Thread animaton = new Thread() {
 		@Override
 		public void run() {
-			animate();
+			try {
+				animate();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 	};
@@ -64,6 +75,7 @@ public abstract class Pawn {
 		this.setX(0);
 		this.setY(0);
 		this.isAlive = true;
+		this.addPawn();
 	}
 
 	Pawn(int x, int y) {
@@ -71,13 +83,14 @@ public abstract class Pawn {
 		this.setY(y);
 		this.isAlive = true;
 		this.lastTimer = System.currentTimeMillis();
+		this.addPawn();
 
 	}
 
 	public Boolean hasSpell() {
 		return this.haveSpell;
 	}
-	
+
 	public void setHasSpell(Boolean i) {
 		this.haveSpell = i;
 	}
@@ -87,7 +100,7 @@ public abstract class Pawn {
 	}
 
 	public void setDirection(Direction i) {
-		if(this.hasSpell())
+		if (this.hasSpell())
 			this.pdirection = i;
 	}
 
@@ -98,7 +111,22 @@ public abstract class Pawn {
 	public void shoot() {
 		if (this.getCanShoot() && this.hasSpell()) {
 
-			this.spell = new Spell(this.getX(), this.getY(), this.getDirection());
+			switch (this.getDirection()) {
+			case UP:
+				this.spell = new Spell(this.getX(), this.getY(), Direction.DOWN);
+				break;
+			case DOWN:
+				this.spell = new Spell(this.getX(), this.getY(), Direction.UP);
+				break;
+			case LEFT:
+				this.spell = new Spell(this.getX(), this.getY(), Direction.RIGHT);
+				break;
+			case RIGHT:
+				this.spell = new Spell(this.getX(), this.getY(), Direction.LEFT);
+				break;
+			default:
+				break;
+			}
 			this.haveSpell = false;
 
 		}
@@ -123,6 +151,10 @@ public abstract class Pawn {
 	 */
 	public void launchAnimaton() {
 		this.animaton.start();
+	}
+	
+	public Thread getAnimaton() {
+		return this.animaton;
 	}
 
 	/**
@@ -165,7 +197,7 @@ public abstract class Pawn {
 
 	/**
 	 * Return if the pawn is alive
-	 *  
+	 * 
 	 * @return Boolean state of the pawn
 	 */
 
@@ -173,38 +205,35 @@ public abstract class Pawn {
 	 * Function to move left the pawn, 32px is the size of the sprite.
 	 */
 	public void move_left() {
-		if(this.getX() - 32  >= 0)
+		if (this.getX() - 32 >= 0)
 			this.setX(this.getX() - 32);
-		else{
+		else {
 			this.setDirection(Direction.RIGHT);
-			
+
 		}
-		
-		
+
 	}
 
 	/**
 	 * Function to move right the pawn, 32px is the size of the sprite.
 	 */
 	public void move_right() {
-		if(this.getX() <= 640 - 64)
+		if (this.getX() <= 640 - 64)
 			this.setX(this.getX() + 32);
-		else{
+		else {
 			this.setDirection(Direction.LEFT);
-			
 		}
-		
+
 	}
 
 	/**
 	 * Function to move up the pawn, 32px is the size of the sprite.
 	 */
 	public void move_up() {
-		if(this.getY() - 32 >= 0)
+		if (this.getY() - 32 >= 0)
 			this.setY(this.getY() - 32);
-		else{
+		else {
 			this.setDirection(Direction.DOWN);
-			
 		}
 	}
 
@@ -212,13 +241,13 @@ public abstract class Pawn {
 	 * Function to move down the pawn, 32px is the size of the sprite.
 	 */
 	public void move_down() {
-		if(this.getY()  <= 384 - 96)
+		if (this.getY() <= 384 - 96)
 			this.setY(this.getY() + 32);
-		else{
-			this.setDirection(Direction.UP	);
-			
+		else {
+			this.setDirection(Direction.UP);
+
 		}
-		
+
 	}
 
 	/**
@@ -269,11 +298,17 @@ public abstract class Pawn {
 		return this.isAlive;
 	}
 
+	public void setisAlive(boolean isAlive) {
+		this.isAlive = isAlive;
+	}
 	/**
 	 * Function to kill the pawn
 	 */
 	public void kill() {
 		this.isAlive = false;
+		this.setX(0);
+		this.setY(0);
+		
 	}
 
 	/**
@@ -286,6 +321,10 @@ public abstract class Pawn {
 		this.imagePath = imagePath;
 	}
 
+	public String getImagePath() {
+		return this.imagePath;
+	}
+
 	/**
 	 * The sprite loader function
 	 */
@@ -293,23 +332,52 @@ public abstract class Pawn {
 	/**
 	 * Return the image of the pawn.
 	 * 
-	 * @return
+	 * @return BufferedImage the current sprite.
 	 */
 	public BufferedImage getSprite() {
 		return this.sprite;
 	}
 
+	/**
+	 * Sprite loading function
+	 */
 	public void loadSprite() {
 		try {
 			this.sprite = ImageIO.read(new File(this.imagePath));
 		} catch (IOException ex) {
-			JOptionPane.showMessageDialog(new JFrame("Error"), "Error while loading the sprite.");
+			JOptionPane.showMessageDialog(new JFrame("Error"), "Error while loading the sprite.\n" + ex);
 
 		}
 
 	}
 
-	public void animate() {
+	/**
+	 * Collision checking method for each type of pawn.
+	 * 
+	 * @throws InterruptedException
+	 * 
+	 */
+	public void collision() throws InterruptedException {
+		if (!this.hasSpell() && this.spell.getStatus() == Status.SPELL) {
+			this.spell.move();
+		}
+		if (!this.hasSpell() && this.spell.getStatus() == Status.SPELL) {
+			if (this.getX() == this.getSpell().getX() && this.getY() == this.getSpell().getY()) {
+				Thread.sleep(10);
+				Pawn.pawns.remove(this.spell);
+				this.spell = null;
+				this.haveSpell = true;
+			}
+
+		}
+
+		
+	}
+
+	/*
+	 * The animation function of each pawn.
+	 */
+	public void animate() throws InterruptedException {
 		while (true) {
 			if (this.spriteIndex >= this.assets.size())
 				this.spriteIndex = 0;
@@ -317,13 +385,8 @@ public abstract class Pawn {
 			this.setImagePath(this.assets.get(this.spriteIndex));
 			this.loadSprite();
 			this.spriteIndex++;
-			if (!this.hasSpell()) {
-				this.spell.move();
-				if(!this.hasSpell() && this.getX() == this.getSpell().getX() && this.getY() == this.getSpell().getY()) {
-					this.spell = null;
-					this.haveSpell = true;
-				}
-			}
+			this.collision();
+
 			try {
 				Thread.sleep(this.time);
 			} catch (InterruptedException e) {
@@ -332,11 +395,48 @@ public abstract class Pawn {
 		}
 	}
 
+	/**
+	 * Getter for the canShoot attribute.
+	 * 
+	 * @return boolean if the pawn can shoot.
+	 */
 	public Boolean getCanShoot() {
 		return canShoot;
 	}
 
+	/**
+	 * Setter for the canShoot attribute.
+	 * 
+	 * @param canShoot
+	 *            value of canShoot
+	 */
 	public void setCanShoot(Boolean canShoot) {
 		this.canShoot = canShoot;
+	}
+
+	/**
+	 * Getter for the Status attribute.
+	 * 
+	 * @return Status value of status.
+	 */
+	public Status getStatus() {
+		return status;
+	}
+
+	/**
+	 * Setter for the Status attribute.
+	 * 
+	 * @param status
+	 */
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public static List<Pawn> getPawns() {
+		return pawns;
+	}
+
+	public void addPawn() {
+		Pawn.getPawns().add(this);
 	}
 }

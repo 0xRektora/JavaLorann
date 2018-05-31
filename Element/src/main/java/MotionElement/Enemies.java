@@ -10,8 +10,17 @@ public class Enemies extends Pawn {
 	
 	/** The enemy constructor*/
 	public Enemies() {
+		this.setStatus(Status.ENEMY);
+		this.addSprite();
 		this.randomSprite();
 		this.loadSprite();
+	}
+	
+	public Enemies(int x, int y) {
+		this();
+		this.setX(x);
+		this.setY(y);
+		
 	}
 	
 	/**
@@ -22,7 +31,7 @@ public class Enemies extends Pawn {
 		this.enemySprites.add("../sprite/monster_2.png");
 		this.enemySprites.add("../sprite/monster_3.png");
 		this.enemySprites.add("../sprite/monster_4.png");
-		this.enemySprites.add("../sprite/monster_5.png");
+		
 	}
 	
 	/**Randomizer of the sprite selector
@@ -32,6 +41,9 @@ public class Enemies extends Pawn {
 		Random randomizer = new Random();
 		String image = enemySprites.get(randomizer.nextInt(this.enemySprites.size()));
 		this.setImagePath(image);
+		System.out.println(this.getImagePath());
 	}
+	
+	
 
 }

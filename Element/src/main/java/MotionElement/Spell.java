@@ -1,15 +1,16 @@
 package MotionElement;
 
 public class Spell extends Pawn {
-	
+
 	private final int speed = 300;
-	
+
 	public Spell() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public Spell(int x, int y, Direction direction) {
 		super(x, y);
+		this.setStatus(Status.SPELL);
 		this.addAssets("../sprite/fireball_1.png");
 		this.addAssets("../sprite/fireball_2.png");
 		this.addAssets("../sprite/fireball_3.png");
@@ -17,28 +18,26 @@ public class Spell extends Pawn {
 		this.addAssets("../sprite/fireball_5.png");
 		this.launchAnimaton();
 		this.setDirection(direction);
-		
-		
-	}
-	
-	public void move() {
-		
-				
-				if(this.getDirection() == Direction.UP)
-					this.move_up();
-				else if(this.getDirection() ==Direction.DOWN)
-					this.move_down();
-				else if(this.getDirection() == Direction.RIGHT)
-					this.move_right();
-				else if(this.getDirection() == Direction.LEFT)
-					this.move_left();
-			
-		
-		}
-	
-	
-	
-	
-	
-}
+		this.move();
 
+	}
+
+	public void move() {
+
+		if (this.getDirection() == Direction.UP) {
+
+			this.move_up();
+		} else if (this.getDirection() == Direction.DOWN) {
+
+			this.move_down();
+		} else if (this.getDirection() == Direction.RIGHT) {
+
+			this.move_right();
+		} else if (this.getDirection() == Direction.LEFT) {
+
+			this.move_left();
+		}
+
+	}
+
+}
