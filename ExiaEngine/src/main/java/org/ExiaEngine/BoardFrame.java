@@ -12,9 +12,13 @@ public class BoardFrame extends JFrame  {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public static final int CASE20X = 640;
+	
+	public static final int CASE12Y = 384;
 
 	/** The frame dimensions */
-	private Dimension frameDimensions = new Dimension(650, 384);
+	private Dimension frameDimensions = new Dimension(CASE20X+12, CASE12Y);
 
 	/** The panel component. */
 	private BoardPanel panel;

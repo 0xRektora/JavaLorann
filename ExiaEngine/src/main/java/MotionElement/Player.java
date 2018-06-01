@@ -7,7 +7,16 @@ import org.ExiaEngine.KeyboardControl;
 
 public class Player extends Pawn {
 
+	/** Keyboard controller of the player */
 	private KeyboardControl kbControll = new KeyboardControl(this);
+
+	/** Thread of the method for the spell collision detection */
+	private Thread spellChecker = new Thread() {
+		@Override
+		public void run() {
+			moveSpell();
+		}
+	};
 
 	public Player(BoardFrame frame) throws InterruptedException {
 		super(0, 0);
@@ -24,6 +33,7 @@ public class Player extends Pawn {
 		this.launchCollisionDetection();
 		frame.addKeyListener(this.kbControll);
 		this.setCanShoot(true);
+		this.spellChecker.start();
 
 	}
 
@@ -33,9 +43,7 @@ public class Player extends Pawn {
 
 	@Override
 	public void move_left() {
-		if (this.getX() - 32 >= 0)
-			this.setX(this.getX() - 32);
-
+		super.move_left();
 		this.setImagePath("../sprite/lorann_l.png");
 		this.loadSprite();
 		this.setSpriteIndex(0);
@@ -81,23 +89,41 @@ public class Player extends Pawn {
 		this.setDirection(Direction.DOWN);
 	}
 
-	@Override
-	public void detectCollision() throws InterruptedException {
+	/**
+	 * Mover of the spell.
+	 */
+	public void moveSpell() {
 		while (true) {
+
 			// Moving the spell
 			if (!this.hasSpell() && this.getSpell().getStatus() == Status.SPELL) {
 				this.getSpell().move();
-
 			}
-			// Re get the spell
-			if (!this.hasSpell() && this.getSpell().getStatus() == Status.SPELL) {
+
+			try {
+				Thread.sleep(this.getTime());
+			} catch (InterruptedException e) {
+			}
+
+		}
+	}
+
+	/**
+	 * Detect the collision between the spell and the enemy and the spell and the player.
+	 * 
+	 */
+	@Override
+	public void detectCollision() throws InterruptedException {
+		while (true) {
+			if (!this.hasSpell()) {
 				if (this.getX() == this.getSpell().getX() && this.getY() == this.getSpell().getY()) {
-					Thread.sleep(10);
 					Pawn.getPawns().remove(this.getSpell());
 					this.resetSpell();
 					this.setHasSpell(true);
 				}
 			}
+
+			// If a enemy touch the player
 			Iterator<Pawn> iter = Pawn.getPawns().iterator();
 			while (iter.hasNext()) {
 				Pawn i = iter.next();
@@ -112,9 +138,12 @@ public class Player extends Pawn {
 			}
 
 			try {
-				Thread.sleep(this.getTime());
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+
 		}
 
 	}

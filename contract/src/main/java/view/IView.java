@@ -1,5 +1,7 @@
 package view;
 
+import org.ExiaEngine.BoardFrame;
+
 /**
  * <h1>The Interface IView.</h1>
  *
@@ -15,4 +17,10 @@ public interface IView {
      *            the message
      */
     void displayMessage(String message);
+    
+    public BoardFrame getMainWindow();
+
+	public void setMainWindow(BoardFrame mainWindow);
+	
+	public void initWindow(BoardFrame boardframe);
 }

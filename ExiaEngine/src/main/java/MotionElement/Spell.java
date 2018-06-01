@@ -3,7 +3,7 @@ package MotionElement;
 public class Spell extends Pawn {
 
 	private final int speed = 300;
-
+	
 	public Spell() {
 		// TODO Auto-generated constructor stub
 	}
@@ -26,7 +26,6 @@ public class Spell extends Pawn {
 	public void move() {
 
 		if (this.getDirection() == Direction.UP) {
-
 			this.move_up();
 		} else if (this.getDirection() == Direction.DOWN) {
 

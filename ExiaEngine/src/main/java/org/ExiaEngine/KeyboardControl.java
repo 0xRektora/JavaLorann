@@ -29,6 +29,7 @@ public class KeyboardControl implements KeyListener {
 	public void setPawn(Pawn pawn) {
 		this.pawn = pawn;
 	}
+
 	/**
 	 * Function to listen the pawn controller and move it around the map.
 	 * 
@@ -63,7 +64,6 @@ public class KeyboardControl implements KeyListener {
 
 			}
 		}
-
 	}
 
 	@Override
@@ -74,7 +74,6 @@ public class KeyboardControl implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -1,6 +1,7 @@
 package MotionElement;
 
 import java.awt.image.BufferedImage;
+import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,8 +12,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.ExiaEngine.BoardFrame;
+import org.ExiaEngine.BoardPanel;
 
-public abstract class Pawn  extends JPanel{
+public abstract class Pawn {
 
 	/** The list of all pawns */
 	private static List<Pawn> pawns = new ArrayList<Pawn>();
@@ -65,7 +68,7 @@ public abstract class Pawn  extends JPanel{
 
 		}
 	};
-	
+
 	private Thread collision = new Thread() {
 		@Override
 		public void run() {
@@ -106,11 +109,11 @@ public abstract class Pawn  extends JPanel{
 	public Spell getSpell() {
 		return this.spell;
 	}
-	
+
 	public void resetSpell() {
 		this.spell = null;
 	}
-	
+
 	public void setDirection(Direction i) {
 		if (this.hasSpell())
 			this.pdirection = i;
@@ -164,10 +167,11 @@ public abstract class Pawn  extends JPanel{
 	public void launchAnimaton() {
 		this.animaton.start();
 	}
-	
+
 	public void launchCollisionDetection() {
 		this.collision.start();
 	}
+
 	public Thread getAnimaton() {
 		return this.animaton;
 	}
@@ -220,9 +224,25 @@ public abstract class Pawn  extends JPanel{
 	 * Function to move left the pawn, 32px is the size of the sprite.
 	 */
 	public void move_left() {
-		if (this.getX() - 32 >= 0)
+		Object tile = null;
+		try {
+			tile = ((Obstacle) BoardPanel.getObject(this.getX() - 32, this.getY()));
+		} catch (Exception e) {
+
+		}
+
+		if (tile != null) {
+			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) {
+				this.setX(this.getX() - 32);
+				this.setDirection(Direction.LEFT);
+			} else {
+				if (this.getStatus() == Status.SPELL)
+					this.setDirection(Direction.RIGHT);
+			}
+		} else if (this.getX() - 32 >= 0) {
 			this.setX(this.getX() - 32);
-		else {
+			this.setDirection(Direction.LEFT);
+		} else {
 			this.setDirection(Direction.RIGHT);
 
 		}
@@ -233,9 +253,26 @@ public abstract class Pawn  extends JPanel{
 	 * Function to move right the pawn, 32px is the size of the sprite.
 	 */
 	public void move_right() {
-		if (this.getX() <= 640 - 64)
+		Object tile = null;
+		try {
+			tile = ((Obstacle) BoardPanel.getObject(this.getX() + 32, this.getY()));
+		} catch (Exception e) {
+
+		}
+		if (tile != null) {
+			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) {
+				this.setX(this.getX() + 32);
+				this.setDirection(Direction.RIGHT);
+			} else {
+				if (this.getStatus() == Status.SPELL)
+					this.setDirection(Direction.LEFT);
+			}
+		} else if (this.getX() <= BoardFrame.CASE20X - 64) {
 			this.setX(this.getX() + 32);
-		else {
+			this.setDirection(Direction.RIGHT);
+			// System.out.println(" This position X : " + this.getX() + "This position Y
+			// :"+this.getY() );
+		} else {
 			this.setDirection(Direction.LEFT);
 		}
 
@@ -245,9 +282,26 @@ public abstract class Pawn  extends JPanel{
 	 * Function to move up the pawn, 32px is the size of the sprite.
 	 */
 	public void move_up() {
-		if (this.getY() - 32 >= 0)
+		Object tile = null;
+		try {
+			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY() - 32));
+		} catch (Exception e) {
+
+		}
+		if (tile != null) {
+			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) {
+				this.setY(this.getY() - 32);
+				this.setDirection(Direction.UP);
+			} else {
+				if (this.getStatus() == Status.SPELL)
+					this.setDirection(Direction.DOWN);
+			}
+		} else if (this.getY() - 32 >= 0) {
 			this.setY(this.getY() - 32);
-		else {
+			this.setDirection(Direction.UP);
+			// System.out.println(" This position X : " + this.getX() + "This position Y
+			// :"+this.getY() );
+		} else {
 			this.setDirection(Direction.DOWN);
 		}
 	}
@@ -256,9 +310,26 @@ public abstract class Pawn  extends JPanel{
 	 * Function to move down the pawn, 32px is the size of the sprite.
 	 */
 	public void move_down() {
-		if (this.getY() <= 384 - 96)
+		Object tile = null;
+		try {
+			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY() + 32));
+		} catch (Exception e) {
+
+		}
+		if (tile != null) {
+			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) {
+				this.setY(this.getY() + 32);
+				this.setDirection(Direction.DOWN);
+			} else {
+				if (this.getStatus() == Status.SPELL)
+					this.setDirection(Direction.UP);
+			}
+		} else if (this.getY() <= BoardFrame.CASE12Y - 96) {
 			this.setY(this.getY() + 32);
-		else {
+			// System.out.println(" This position X : " + this.getX() + "This position Y
+			// :"+this.getY() );
+			this.setDirection(Direction.DOWN);
+		} else {
 			this.setDirection(Direction.UP);
 
 		}
@@ -269,8 +340,8 @@ public abstract class Pawn  extends JPanel{
 	 * Function to move up right the pawn, 32px is the size of the sprite.
 	 */
 	public void move_up_right() {
-		this.setX(this.getX() + 32);
-		this.setY(this.getY() - 32);
+		this.move_up();
+		this.move_right();
 
 	}
 
@@ -278,8 +349,8 @@ public abstract class Pawn  extends JPanel{
 	 * Function to move down right the pawn, 32px is the size of the sprite.
 	 */
 	public void move_down_right() {
-		this.setX(this.getX() + 32);
-		this.setY(this.getY() + 32);
+		this.move_down();
+		this.move_right();
 
 	}
 
@@ -287,16 +358,16 @@ public abstract class Pawn  extends JPanel{
 	 * Function to move up left the pawn, 32px is the size of the sprite.
 	 */
 	public void move_up_left() {
-		this.setX(this.getX() - 32);
-		this.setY(this.getY() - 32);
+		this.move_up();
+		this.move_left();
 	}
 
 	/**
 	 * Function to move down left the pawn, 32px is the size of the sprite.
 	 */
 	public void move_down_left() {
-		this.setX(this.getX() - 32);
-		this.setY(this.getY() + 32);
+		this.move_down();
+		this.move_left();
 	}
 
 	public void setSpriteIndex(int i) {
@@ -316,6 +387,7 @@ public abstract class Pawn  extends JPanel{
 	public void setisAlive(boolean isAlive) {
 		this.isAlive = isAlive;
 	}
+
 	/**
 	 * Function to kill the pawn
 	 */
@@ -323,7 +395,7 @@ public abstract class Pawn  extends JPanel{
 		this.isAlive = false;
 		this.setX(0);
 		this.setY(0);
-		
+
 	}
 
 	/**
@@ -366,8 +438,6 @@ public abstract class Pawn  extends JPanel{
 
 	}
 
-	
-
 	/*
 	 * The animation function of each pawn.
 	 */
@@ -387,16 +457,14 @@ public abstract class Pawn  extends JPanel{
 
 		}
 	}
-	
-	public void detectCollision() throws InterruptedException {
-		while(true) {
-	
-		
-		try {
-			Thread.sleep(this.getTime());
-		} catch (InterruptedException e) {
-		}
 
+	public void detectCollision() throws InterruptedException {
+		while (true) {
+
+			try {
+				Thread.sleep(this.getTime());
+			} catch (InterruptedException e) {
+			}
 
 		}
 

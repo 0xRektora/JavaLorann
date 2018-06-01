@@ -3,6 +3,11 @@ package model;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.ExiaEngine.BoardFrame;
+
+import MotionElement.Enemies;
+import MotionElement.Player;
+
 /**
  * <h1>The Interface IModel.</h1>
  *
@@ -41,4 +46,19 @@ public interface IModel {
      *             the SQL exception
      */
     List<Example> getAllExamples() throws SQLException;
+    
+    public Player getPlayer();
+    
+    public void setPlayer(Player player);
+    
+    public BoardFrame getBoardframe();
+
+	public void setBoardframe(BoardFrame boardframe);
+	
+	public void addEnemy(Enemies enemy);
+	
+	public void removeEnemy(Enemies enemy);
+	
+	public List<Enemies> getEnemies(Enemies enemy);
+
 }
