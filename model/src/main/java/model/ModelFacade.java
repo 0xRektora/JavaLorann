@@ -3,8 +3,11 @@ package model;
 import java.sql.SQLException;
 import java.util.List;
 
-import model.dao.ExampleDAO;
+import org.ExiaEngine.BoardFrame;
 
+import MotionElement.Enemies;
+import MotionElement.Player;
+import model.dao.ExampleDAO;
 /**
  * <h1>The Class ModelFacade provides a facade of the Model component.</h1>
  *
@@ -13,11 +16,22 @@ import model.dao.ExampleDAO;
  */
 public final class ModelFacade implements IModel {
 
+	/** Current instantance of the player*/
+	private Player player;
+	
+	/** Current instance of the window*/
+	private BoardFrame boardframe;
+	
+	/** Current instances of the enemies*/
+	private List<Enemies> enemies;
+	
     /**
      * Instantiates a new model facade.
      */
     public ModelFacade() {
         super();
+
+        
     }
 
     /*
@@ -46,5 +60,42 @@ public final class ModelFacade implements IModel {
     public List<Example> getAllExamples() throws SQLException {
         return ExampleDAO.getAllExamples();
     }
+    
+    @Override
+	public Player getPlayer() {
+		return player;
+	}
+
+	@Override
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+	
+	@Override
+	public BoardFrame getBoardframe() {
+		return boardframe;
+	}
+
+	@Override
+	public void setBoardframe(BoardFrame boardframe) {
+		this.boardframe = boardframe;
+	}
+
+	@Override
+	public void addEnemy(Enemies enemy) {
+		this.enemies.add(enemy);
+		
+	}
+
+	@Override
+	public void removeEnemy(Enemies enemy) {
+		this.enemies.remove(enemy);
+		
+	}
+
+	@Override
+	public List<Enemies> getEnemies(Enemies enemy) {
+		return this.enemies;
+	}
 
 }
