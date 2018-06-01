@@ -2,14 +2,15 @@ package MotionElement;
 
 import java.util.Iterator;
 
-
+import org.ExiaEngine.BoardFrame;
+import org.ExiaEngine.KeyboardControl;
 
 public class Player extends Pawn {
-	
-	
-	
-	public Player() {
-		super();
+
+	private KeyboardControl kbControll = new KeyboardControl(this);
+
+	public Player(BoardFrame frame) throws InterruptedException {
+		super(0, 0);
 		this.setStatus(Status.PLAYER);
 		this.addAssets("../sprite/lorann_b.png");
 		this.addAssets("../sprite/lorann_bl.png");
@@ -20,23 +21,21 @@ public class Player extends Pawn {
 		this.addAssets("../sprite/lorann_r.png");
 		this.addAssets("../sprite/lorann_br.png");
 		this.launchAnimaton();
+		this.launchCollisionDetection();
+		frame.addKeyListener(this.kbControll);
 		this.setCanShoot(true);
-		
-		
+
 	}
 
-
-	
-	
 	/**
 	 * Function to move left the pawn, 32px is the size of the sprite.
 	 */
 
 	@Override
 	public void move_left() {
-		if(this.getX() - 32  >= 0)
+		if (this.getX() - 32 >= 0)
 			this.setX(this.getX() - 32);
-		
+
 		this.setImagePath("../sprite/lorann_l.png");
 		this.loadSprite();
 		this.setSpriteIndex(0);
@@ -55,7 +54,7 @@ public class Player extends Pawn {
 		this.loadSprite();
 		this.setSpriteIndex(0);
 		this.setDirection(Direction.RIGHT);
-		
+
 	}
 
 	/**
@@ -83,21 +82,40 @@ public class Player extends Pawn {
 	}
 
 	@Override
-	public void collision() throws InterruptedException {
-		super.collision();
-		Iterator<Pawn> iter = Pawn.getPawns().iterator();
-		while (iter.hasNext()) {
-			Pawn i = iter.next();
-			if(this.getStatus() == Status.PLAYER) {
-				if(this.getX() == i.getX() && this.getY() == i.getY() && i.getStatus() == Status.ENEMY) {
-					Pawn.getPawns().remove(this);
-					this.kill();
-					System.out.println("Game Over");
-					break;
+	public void detectCollision() throws InterruptedException {
+		while (true) {
+			// Moving the spell
+			if (!this.hasSpell() && this.getSpell().getStatus() == Status.SPELL) {
+				this.getSpell().move();
+
+			}
+			// Re get the spell
+			if (!this.hasSpell() && this.getSpell().getStatus() == Status.SPELL) {
+				if (this.getX() == this.getSpell().getX() && this.getY() == this.getSpell().getY()) {
+					Thread.sleep(10);
+					Pawn.getPawns().remove(this.getSpell());
+					this.resetSpell();
+					this.setHasSpell(true);
 				}
 			}
+			Iterator<Pawn> iter = Pawn.getPawns().iterator();
+			while (iter.hasNext()) {
+				Pawn i = iter.next();
+				if (this.getStatus() == Status.PLAYER) {
+					if (i.getStatus() == Status.ENEMY && this.getX() == i.getX() && this.getY() == i.getY()) {
+						Pawn.getPawns().remove(this);
+						this.kill();
+						break;
+					}
+				}
 
+			}
+
+			try {
+				Thread.sleep(this.getTime());
+			} catch (InterruptedException e) {
+			}
 		}
-	}
 
+	}
 }

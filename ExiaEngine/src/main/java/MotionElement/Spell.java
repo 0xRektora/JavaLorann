@@ -8,7 +8,7 @@ public class Spell extends Pawn {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Spell(int x, int y, Direction direction) {
+	public Spell(int x, int y, Direction direction) throws InterruptedException {
 		super(x, y);
 		this.setStatus(Status.SPELL);
 		this.addAssets("../sprite/fireball_1.png");
@@ -17,6 +17,7 @@ public class Spell extends Pawn {
 		this.addAssets("../sprite/fireball_4.png");
 		this.addAssets("../sprite/fireball_5.png");
 		this.launchAnimaton();
+		this.launchCollisionDetection();
 		this.setDirection(direction);
 		this.move();
 

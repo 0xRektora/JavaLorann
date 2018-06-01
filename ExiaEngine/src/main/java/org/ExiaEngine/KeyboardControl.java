@@ -18,9 +18,17 @@ public class KeyboardControl implements KeyListener {
 	 *            take the pawn we wanna move.
 	 */
 	public KeyboardControl(Pawn pawn) {
+		super();
 		this.pawn = pawn;
 	}
 
+	public KeyboardControl() {
+		super();
+	}
+
+	public void setPawn(Pawn pawn) {
+		this.pawn = pawn;
+	}
 	/**
 	 * Function to listen the pawn controller and move it around the map.
 	 * 
@@ -43,11 +51,12 @@ public class KeyboardControl implements KeyListener {
 				this.pawn.move_down();
 				break;
 			case KeyEvent.VK_SPACE:
-				this.pawn.shoot();
-				break;
-			case KeyEvent.VK_ENTER:
-				System.out.println("enter");
-				Player player = new Player();
+				try {
+					this.pawn.shoot();
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				break;
 			default:
 				break;

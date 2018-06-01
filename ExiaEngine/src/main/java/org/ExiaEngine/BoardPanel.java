@@ -15,18 +15,11 @@ public class BoardPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/** The keyboard controller */
-	private KeyboardControl kbControll;
-	Player lorann = new Player();
 	
-
-	BoardPanel() {
+	BoardPanel() throws InterruptedException {
 		super();
-		this.setFocusable(true);
-		this.requestFocusInWindow();
 		this.setBackground(Color.BLACK);
-		this.kbControll = new KeyboardControl(this.lorann);
-		this.addKeyListener(this.kbControll);
+		
 		Enemies enemy = new Enemies(64, 64);
 	}
 
@@ -35,7 +28,8 @@ public class BoardPanel extends JPanel {
 		super.paintComponent(g);
 		if (Pawn.getPawns().size() > 0) {
 			for (Pawn i : Pawn.getPawns()) {
-				g.drawImage(i.getSprite(), i.getX(), i.getY(), this);
+				if(i.isAlive())
+					g.drawImage(i.getSprite(), i.getX(), i.getY(), this);
 			}
 		}
 	}

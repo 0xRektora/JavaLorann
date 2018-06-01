@@ -4,7 +4,9 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-public class BoardFrame extends JFrame implements Runnable {
+import MotionElement.Player;
+
+public class BoardFrame extends JFrame  {
 
 	/**
 	 * 
@@ -12,18 +14,30 @@ public class BoardFrame extends JFrame implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	/** The frame dimensions */
-	public Dimension frameDimensions = new Dimension(650, 384);
+	private Dimension frameDimensions = new Dimension(650, 384);
 
 	/** The panel component. */
-	public BoardPanel panel;
-
+	private BoardPanel panel;
+	
+	private Thread paintWindow = new Thread() {
+		@Override
+		public void run() {
+			
+			while(true)
+				panel.repaint();
+		}
+	};
+	
+	
+	
 	/**
 	 * Constructor of the BoardFrame class.
 	 * 
 	 * @param title
 	 *            the title of the window.
+	 * @throws InterruptedException 
 	 */
-	public BoardFrame(String title) {
+	public BoardFrame(String title) throws InterruptedException {
 		super();
 		this.setTitle(title);
 		this.setSize(this.frameDimensions.width, this.frameDimensions.height);
@@ -33,7 +47,10 @@ public class BoardFrame extends JFrame implements Runnable {
 		this.setContentPane(this.panel);
 		this.setResizable(false);
 		this.setVisible(true);
-		this.run();
+		this.paintWindow.start();
+		
+		
+		
 	}
 
 	/**
@@ -50,14 +67,6 @@ public class BoardFrame extends JFrame implements Runnable {
 		return this.frameDimensions;
 	}
 
-	@Override
-	public void run() {
-		while (true) {
-			this.panel.repaint();
-
-
-		}
-
-	}
+	
 
 }

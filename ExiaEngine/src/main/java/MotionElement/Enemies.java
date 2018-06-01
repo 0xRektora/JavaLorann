@@ -1,6 +1,7 @@
 package MotionElement;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -8,15 +9,17 @@ public class Enemies extends Pawn {
 	/** A list containing the entire sprites.*/
 	private List<String> enemySprites = new ArrayList<String>();;
 	
-	/** The enemy constructor*/
-	public Enemies() {
+	/** The enemy constructor
+	 * @throws InterruptedException */
+	public Enemies() throws InterruptedException {
 		this.setStatus(Status.ENEMY);
 		this.addSprite();
 		this.randomSprite();
 		this.loadSprite();
+		this.launchCollisionDetection();
 	}
 	
-	public Enemies(int x, int y) {
+	public Enemies(int x, int y) throws InterruptedException {
 		this();
 		this.setX(x);
 		this.setY(y);
@@ -41,7 +44,33 @@ public class Enemies extends Pawn {
 		Random randomizer = new Random();
 		String image = enemySprites.get(randomizer.nextInt(this.enemySprites.size()));
 		this.setImagePath(image);
-		System.out.println(this.getImagePath());
+	}
+	
+	/**
+	 * Collision detection of the enemies
+	 */
+	@Override
+	public void detectCollision() throws InterruptedException {
+		while (true) {
+			Iterator<Pawn> iter = Pawn.getPawns().iterator();
+			while (iter.hasNext()) {
+				Pawn i = iter.next();
+				if (this.getStatus() == Status.ENEMY) {
+					if (i.getStatus() == Status.SPELL && this.getX() == i.getX() && this.getY() == i.getY()) {
+						Pawn.getPawns().remove(this);
+						this.kill();
+						break;
+					}
+				}
+
+			}
+
+			try {
+				Thread.sleep(this.getTime());
+			} catch (InterruptedException e) {
+			}
+		}
+
 	}
 	
 	
