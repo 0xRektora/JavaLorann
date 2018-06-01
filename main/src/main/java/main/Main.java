@@ -15,22 +15,22 @@ import view.ViewFacade;
  */
 public abstract class Main {
 
-    /**
-     * The main method.
-     *
-     * @param args
-     *            the arguments
-     * @throws InterruptedException 
-     */
-    public static void main(final String[] args) throws InterruptedException {
-        final ControllerFacade controller = new ControllerFacade(new ViewFacade(), new ModelFacade());
-        
-        try {
-            controller.start();
-            
-        } catch (final SQLException exception) {
-            exception.printStackTrace();
-        }
-    }
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 * @throws InterruptedException
+	 */
+	public static void main(final String[] args) throws InterruptedException {
+		final ControllerFacade controller = new ControllerFacade(new ViewFacade(), new ModelFacade());
+
+		try {
+			controller.start();
+
+		} catch (final SQLException exception) {
+			exception.printStackTrace();
+		}
+	}
 
 }
