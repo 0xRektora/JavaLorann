@@ -25,6 +25,8 @@ public final class ModelFacade implements IModel {
 	/** Current instances of the enemies*/
 	private List<Enemies> enemies;
 	
+	
+	
     /**
      * Instantiates a new model facade.
      */
