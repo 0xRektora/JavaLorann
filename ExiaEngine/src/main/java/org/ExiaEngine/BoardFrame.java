@@ -23,10 +23,13 @@ public class BoardFrame extends JFrame  {
 	/** The panel component. */
 	private BoardPanel panel;
 	
+	/** FPS counter */
+	private FPSCounter fpscounter;
+	
+	/** Repaint the panel*/
 	private Thread paintWindow = new Thread() {
 		@Override
 		public void run() {
-			
 			while(true)
 				panel.repaint();
 		}
@@ -52,6 +55,8 @@ public class BoardFrame extends JFrame  {
 		this.setResizable(false);
 		this.setVisible(true);
 		this.paintWindow.start();
+		this.fpscounter = new FPSCounter();
+		this.fpscounter.start();
 		
 		
 		

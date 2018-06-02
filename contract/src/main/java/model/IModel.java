@@ -84,4 +84,8 @@ public interface IModel {
 	
 	public List<Enemies> getEnemies(Enemies enemy);
 
+	void setLvl(int checkSelection);
+	
+	int getLvl();
+
 }

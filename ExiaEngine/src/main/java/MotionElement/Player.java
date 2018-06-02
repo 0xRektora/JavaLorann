@@ -238,7 +238,6 @@ public class Player extends Pawn {
 	@Override
 	public void kill() {
 		super.kill();
-		JOptionPane.showMessageDialog(new JFrame("Error"), "Game Over !\nYour Score : " + this.getScore());
 	}
 
 	@Override

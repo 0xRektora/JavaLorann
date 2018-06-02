@@ -1,14 +1,25 @@
 package controller;
 
+import java.awt.BorderLayout;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import org.ExiaEngine.BoardFrame;
 import org.ExiaEngine.BoardPanel;
 
 import MotionElement.Enemies;
 import MotionElement.Obstacle;
+import MotionElement.Pawn;
 import MotionElement.Player;
 import MotionElement.Status;
 import model.Example;
@@ -30,6 +41,13 @@ public class ControllerFacade implements IController {
 	/** The model. */
 	private final IModel model;
 
+	private Thread gameState = new Thread() {
+		@Override
+		public void run() {
+			checkPlayerState();
+		}
+	};
+
 	private List<String> map = new ArrayList<String>();
 
 	/**
@@ -44,6 +62,7 @@ public class ControllerFacade implements IController {
 		super();
 		this.model = model;
 		this.view = view;
+		this.gameState.start();
 
 	}
 
@@ -57,11 +76,54 @@ public class ControllerFacade implements IController {
 	public void start() throws SQLException, InterruptedException {
 		this.model.setBoardframe(new BoardFrame("Lorann"));
 		this.view.initWindow(this.model.getBoardframe());
-		// this.drawMap();
-		//this.model.setPlayer(new Player(0, 0, this.model.getBoardframe()));
-		// JOptionPane.showMessageDialog(new JFrame("Error"), );
-		this.drawMap(1);
+		this.level();
 
+	}
+	
+	public void level() throws InterruptedException {
+		this.chooseLevel();
+		this.drawMap(this.getModel().getLvl());
+	}
+
+	/**
+	 * Function that ask the user a level to load w/ a option pan.
+	 */
+	public void chooseLevel() {
+		DefaultTableModel tableModel = new DefaultTableModel();
+		tableModel.addColumn("Levels:", new Object[] { "1", "2", "3", "4", "5" });
+
+		JTable table = new JTable(tableModel);
+		ListSelectionModel selectionModel = table.getSelectionModel();
+
+		JPanel p = new JPanel(new BorderLayout());
+		p.add(table, BorderLayout.CENTER);
+
+		int option = JOptionPane.showConfirmDialog(null, p, "Choose a level:", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.INFORMATION_MESSAGE);
+
+		if (JOptionPane.OK_OPTION == option) {
+			this.getModel().setLvl(checkSelection(selectionModel, tableModel));
+		} else {
+			selectionModel.clearSelection();
+		}
+
+	}
+
+	/**
+	 * Function to get the selected value from the option pan.
+	 * 
+	 * @param selectionModel
+	 * @param tableModel
+	 * @return
+	 */
+	private static int checkSelection(ListSelectionModel selectionModel, TableModel tableModel) {
+		for (int i = selectionModel.getMinSelectionIndex(); i <= selectionModel.getMaxSelectionIndex(); i++) {
+			if (selectionModel.isSelectedIndex(i)) {
+				Object selectedValue = tableModel.getValueAt(i, 0);
+				return Integer.parseInt((String) selectedValue);
+			}
+		}
+		return 1;
 	}
 
 	public void drawMap(int lvl) throws InterruptedException {
@@ -135,7 +197,41 @@ public class ControllerFacade implements IController {
 				BoardPanel.removeObject(x * 32, y * 32);
 			}
 		}
+		for(Pawn i: Pawn.getPawns())
+		{
+			if(i.getStatus() == Status.ENEMY) {
+				Pawn.getPawns().remove(i);
+			}
+		}
 		this.getModel().getPlayer().kill(false);
+	}
+
+	public void checkPlayerState() {
+		while (true) {
+			try {
+				if (!this.getModel().getPlayer().isAlive()) {
+					this.resetMap();
+					JOptionPane.showMessageDialog(new JFrame("Error"), "Game Over !\nYour Score : " + this.getModel().getPlayer().getScore());
+					this.getModel().getBoardframe().dispose();
+					
+					try {
+						this.start();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			} catch (Exception e) {
+
+			}
+
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -166,7 +262,7 @@ public class ControllerFacade implements IController {
 	 * @param x
 	 * @param y
 	 * @param boardframe
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
 	public void instanciateObject(int x, int y, BoardFrame boardframe) throws InterruptedException {
 		this.model.setPlayer(new Player(x, y, boardframe));

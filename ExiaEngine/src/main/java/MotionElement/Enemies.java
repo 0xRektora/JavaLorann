@@ -182,6 +182,7 @@ public class Enemies extends Pawn {
 								&& this.getY() == i.getSpell().getY()) {
 							this.kill();
 							Pawn.getPawns().remove(this);
+							Pawn.getPawns().remove(i.getSpell());
 							break;
 						}
 					}
