@@ -1,7 +1,6 @@
 package MotionElement;
 
 import java.awt.image.BufferedImage;
-import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import org.ExiaEngine.BoardFrame;
 import org.ExiaEngine.BoardPanel;
@@ -227,10 +225,12 @@ public abstract class Pawn {
 		Object tile = null;
 		try {
 			tile = ((Obstacle) BoardPanel.getObject(this.getX() - 32, this.getY()));
+			if (((Obstacle) tile).getStatus() == Status.GATE_CLOSED && this.getStatus() == Status.PLAYER) {
+				this.kill();
+			}
 		} catch (Exception e) {
 
 		}
-
 		if (tile != null) {
 			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) {
 				this.setX(this.getX() - 32);
@@ -238,6 +238,9 @@ public abstract class Pawn {
 			} else {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.RIGHT);
+			}
+			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision between the spell and a purse/gate
+				this.setDirection(Direction.RIGHT);
 			}
 		} else if (this.getX() - 32 >= 0) {
 			this.setX(this.getX() - 32);
@@ -256,6 +259,9 @@ public abstract class Pawn {
 		Object tile = null;
 		try {
 			tile = ((Obstacle) BoardPanel.getObject(this.getX() + 32, this.getY()));
+			if (((Obstacle) tile).getStatus() == Status.GATE_CLOSED && this.getStatus() == Status.PLAYER) {
+				this.kill();
+			}
 		} catch (Exception e) {
 
 		}
@@ -266,6 +272,9 @@ public abstract class Pawn {
 			} else {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.LEFT);
+			}
+			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision between the spell and a purse/gate
+				this.setDirection(Direction.LEFT);
 			}
 		} else if (this.getX() <= BoardFrame.CASE20X - 64) {
 			this.setX(this.getX() + 32);
@@ -285,9 +294,12 @@ public abstract class Pawn {
 		Object tile = null;
 		try {
 			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY() - 32));
+			if (((Obstacle) tile).getStatus() == Status.GATE_CLOSED && this.getStatus() == Status.PLAYER) {
+				this.kill();
+			}
 		} catch (Exception e) {
-
 		}
+
 		if (tile != null) {
 			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) {
 				this.setY(this.getY() - 32);
@@ -295,6 +307,9 @@ public abstract class Pawn {
 			} else {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.DOWN);
+			}
+			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision between the spell and a purse/gate
+				this.setDirection(Direction.DOWN);
 			}
 		} else if (this.getY() - 32 >= 0) {
 			this.setY(this.getY() - 32);
@@ -313,18 +328,25 @@ public abstract class Pawn {
 		Object tile = null;
 		try {
 			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY() + 32));
+			if (((Obstacle) tile).getStatus() == Status.GATE_CLOSED && this.getStatus() == Status.PLAYER) { // Collision between the player and the closed gate
+				this.kill();
+			}
 		} catch (Exception e) {
 
 		}
+
 		if (tile != null) {
-			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) {
+			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) { // collision between the spell and an obstacle
 				this.setY(this.getY() + 32);
 				this.setDirection(Direction.DOWN);
 			} else {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.UP);
 			}
-		} else if (this.getY() <= BoardFrame.CASE12Y - 96) {
+			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision between the spell and a purse/gate
+				this.setDirection(Direction.UP);
+			}
+		} else if (this.getY() <= BoardFrame.CASE12Y - 96) { // collision between the spell or the player between the border of the map
 			this.setY(this.getY() + 32);
 			// System.out.println(" This position X : " + this.getX() + "This position Y
 			// :"+this.getY() );
@@ -393,6 +415,11 @@ public abstract class Pawn {
 	 */
 	public void kill() {
 		this.isAlive = false;
+		if (!this.hasSpell()) { // remove the spell if it's running and the player died
+			this.setHasSpell(false);
+			Pawn.getPawns().remove(this.spell);
+			this.spell = null;
+		}
 		this.setX(0);
 		this.setY(0);
 
@@ -517,5 +544,10 @@ public abstract class Pawn {
 
 	public int getTime() {
 		return time;
+	}
+
+	public void kill(boolean popup) {
+		// TODO Auto-generated method stub
+
 	}
 }

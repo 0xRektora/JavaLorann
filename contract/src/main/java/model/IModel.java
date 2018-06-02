@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.ExiaEngine.BoardFrame;
@@ -16,6 +17,28 @@ import MotionElement.Player;
  */
 public interface IModel {
 
+	/** Char set of the vertical bone*/
+	public final String VERTICALBONE = "I";
+	
+	/** Char set of the horizontal bone*/
+	public final String HORIZONTALBONE = "-";
+	
+	public final String ROUNDOBSTACLE = "B";
+	
+	public final String PLAYER = "P";
+	
+	public final String MONSTER = "M";
+	
+	public final String PURSE = "D";
+	
+	public final String CRYSTAL = "C";
+	
+	public final String VOID = "V";
+	
+	public final String GATE = "G";
+	
+	public final int FOV = 3;
+	
     /**
      * Gets the example by id.
      *
@@ -25,7 +48,7 @@ public interface IModel {
      * @throws SQLException
      *             the SQL exception
      */
-    Example getExampleById(int id) throws SQLException;
+    ArrayList<Example> getMapByLvl(int id1, int id2) throws SQLException;
 
     /**
      * Gets the example by name.
@@ -45,7 +68,7 @@ public interface IModel {
      * @throws SQLException
      *             the SQL exception
      */
-    List<Example> getAllExamples() throws SQLException;
+    List<Example> getAllmaps() throws SQLException;
     
     public Player getPlayer();
     

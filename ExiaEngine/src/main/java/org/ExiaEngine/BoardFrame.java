@@ -66,6 +66,15 @@ public class BoardFrame extends JFrame  {
 	public void setPan(BoardPanel panel) {
 		this.panel = panel;
 	}
+	
+	/**
+	 * Getter for the frame panel.
+	 * @return BoardPanel
+	 * 		The panel currently used by the BoardFrame.
+	 */
+	public BoardPanel getPan() {
+		return this.panel;
+	}
 
 	public Dimension getDimensions() {
 		return this.frameDimensions;

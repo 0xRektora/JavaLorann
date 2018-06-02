@@ -29,13 +29,16 @@ public class BoardPanel extends JPanel {
 		super();
 		this.setBackground(Color.BLACK);
 		BoardPanel.map = new Object[(int) this.tiles.getWidth()][(int) this.tiles.getHeight()];
-		System.out.println(this.tiles);
-		Enemies enemy = new Enemies(128, 128, 3);
-		Enemies enemy2 = new Enemies(192, 128, 8);
-		for (int i = 1; i < 12; i++) {
-			Obstacle obstacle = new Obstacle(i * 32, 64, true);
-		}
+		
 
+	}
+	
+	/**
+	 * Getter for the tiles dimensions
+	 * @return Dimension
+	 */
+	public Dimension getTile() {
+		return this.tiles;
 	}
 
 	/** Return the map arrays */
@@ -49,16 +52,28 @@ public class BoardPanel extends JPanel {
 
 	public static void addObject(Object obj, int x, int y) {
 		BoardPanel.map[x / 32][y / 32] = obj;
-		System.out.println("Object added at : " + x / 32 + " " + y / 32);
 
+	}
+	
+	public static void removeObject(int x, int y) {
+		BoardPanel.map[x / 32][y / 32] = null;
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		// Painting the pawns
 
 		try {
+			// Painting the map components
+			for (int x = 0; x < (int) this.tiles.getWidth(); x++) {
+				for (int y = 0; y < (int) this.tiles.getHeight(); y++) {
+					Obstacle temp = (Obstacle) BoardPanel.getMap()[x][y];
+					if (temp != null)
+						g.drawImage(temp.getSprite(), temp.getX(), temp.getY(), this);
+				}
+			}
+			
+			//Painting the pawns
 			Iterator<Pawn> iter = Pawn.getPawns().iterator();
 			while (iter.hasNext()) {
 				Pawn i = iter.next();
@@ -67,16 +82,7 @@ public class BoardPanel extends JPanel {
 
 			}
 		} catch (Exception e) {
-			
-		}
 
-		// Painting the map components
-		for (int x = 0; x < (int) this.tiles.getWidth(); x++) {
-			for (int y = 0; y < (int) this.tiles.getHeight(); y++) {
-				Obstacle temp = (Obstacle) BoardPanel.getMap()[x][y];
-				if (temp != null)
-					g.drawImage(temp.getSprite(), temp.getX(), temp.getY(), this);
-			}
 		}
 
 	}

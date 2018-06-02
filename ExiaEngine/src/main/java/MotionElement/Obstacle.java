@@ -14,7 +14,7 @@ import org.ExiaEngine.BoardPanel;
 
 public class Obstacle {
 
-	/** List of all the obstackes instanciated */
+	/** List of all the obstacles instanciated */
 	public static List<Obstacle> obstacles = new ArrayList<Obstacle>();
 
 	/** The X position of the obstacle */
@@ -32,6 +32,24 @@ public class Obstacle {
 	/** The status of this object, in this case obstacle */
 	private Status status;
 
+	public Obstacle(int x, int y, Status status) {
+		this.setX(x);
+		this.setY(y);
+		this.setStatus(status);
+		if(this.getStatus() == Status.CRYSTAL)
+			this.setImagePath("../sprite/crystal_ball.png");
+		else if(this.getStatus() == Status.PURSE)
+			this.setImagePath("../sprite/purse.png");
+		else if(this.getStatus() == Status.GATE_CLOSED)
+			this.setImagePath("../sprite/gate_closed.png");
+		else if(this.getStatus() == Status.OBSTACLE)
+			this.setImagePath("../sprite/bone.png");
+		
+		this.loadSprite();
+		BoardPanel.addObject(this, this.getX(), this.getY());
+		
+	}
+
 	public Obstacle(int x, int y, boolean isVerticalBone) {
 		this.setX(x);
 		this.setY(y);
@@ -40,7 +58,7 @@ public class Obstacle {
 		if (isVerticalBone) {
 			this.setImagePath("../sprite/vertical_bone.png");
 		} else {
-			this.setImagePath("../sprite/bone.png");
+			this.setImagePath("../sprite/horizontal_bone.png");
 		}
 		this.loadSprite();
 
@@ -102,7 +120,21 @@ public class Obstacle {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
+	
+	/** 
+	 * Opening the gate.
+	 * */
+	public void openGate() {
+		this.setStatus(Status.GATE_OPEN);
+		this.setImagePath("../sprite/gate_open.png");
+		this.loadSprite();
+	}
 
+	/**
+	 * Getter for the static list of the obstacles
+	 * @return List<Obstacle>
+	 * 		The list of all the obstacles objects.
+	 */
 	public static List<Obstacle> getObstacles() {
 		return Obstacle.obstacles;
 	}

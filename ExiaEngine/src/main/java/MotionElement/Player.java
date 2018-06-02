@@ -2,13 +2,24 @@ package MotionElement;
 
 import java.util.Iterator;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import org.ExiaEngine.BoardFrame;
+import org.ExiaEngine.BoardPanel;
 import org.ExiaEngine.KeyboardControl;
 
 public class Player extends Pawn {
 
 	/** Keyboard controller of the player */
 	private KeyboardControl kbControll = new KeyboardControl(this);
+
+	private final int pointPerPurse = 200;
+	
+	private boolean hasCrystal = false;
+
+	/** The score of the player */
+	private int score = 0;
 
 	/** Thread of the method for the spell collision detection */
 	private Thread spellChecker = new Thread() {
@@ -18,8 +29,8 @@ public class Player extends Pawn {
 		}
 	};
 
-	public Player(BoardFrame frame) throws InterruptedException {
-		super(0, 0);
+	public Player(int x, int y, BoardFrame frame) {
+		super(x, y);
 		this.setStatus(Status.PLAYER);
 		this.addAssets("../sprite/lorann_b.png");
 		this.addAssets("../sprite/lorann_bl.png");
@@ -34,7 +45,58 @@ public class Player extends Pawn {
 		frame.addKeyListener(this.kbControll);
 		this.setCanShoot(true);
 		this.spellChecker.start();
+		
 
+	}
+
+	/**
+	 * Check if the player is on a purse to mark points.
+	 */
+	public void checkPurse() {
+		Object tile = null;
+		try {
+			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY()));
+			if (((Obstacle) tile).getStatus() == Status.PURSE) {
+				this.markPoint();
+				Obstacle.getObstacles().remove(tile);
+				BoardPanel.removeObject(this.getX(), this.getY());
+			}
+		} catch (Exception e) {
+		}
+	}
+	
+	/**
+	 * Check if the player got the crystal
+	 */
+	public void checkCrystal() {
+		Object tile = null;
+		try {
+			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY()));
+			if (((Obstacle) tile).getStatus() == Status.CRYSTAL && !this.hasCrystal) {
+				this.markPoint();
+				Obstacle.getObstacles().remove(tile);
+				BoardPanel.removeObject(this.getX(), this.getY());
+				this.hasCrystal = true;
+				
+				//A enlever après l'implémentation de la map
+				for(Obstacle i: Obstacle.getObstacles()) {
+					if(i.getStatus() == Status.GATE_CLOSED)
+						i.openGate();
+				}
+			}
+		} catch (Exception e) {
+		}
+	}
+	
+	public void checkEndGame() {
+		Object tile = null;
+		try {
+			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY()));
+			if (((Obstacle) tile).getStatus() == Status.GATE_OPEN) {
+				this.kill();
+			}
+		} catch (Exception e) {
+		}
 	}
 
 	/**
@@ -44,10 +106,13 @@ public class Player extends Pawn {
 	@Override
 	public void move_left() {
 		super.move_left();
+		this.checkPurse();
+		this.checkCrystal();
 		this.setImagePath("../sprite/lorann_l.png");
 		this.loadSprite();
 		this.setSpriteIndex(0);
 		this.setDirection(Direction.LEFT);
+		this.checkEndGame();
 
 	}
 
@@ -58,10 +123,13 @@ public class Player extends Pawn {
 	@Override
 	public void move_right() {
 		super.move_right();
+		this.checkPurse();
+		this.checkCrystal();
 		this.setImagePath("../sprite/lorann_r.png");
 		this.loadSprite();
 		this.setSpriteIndex(0);
 		this.setDirection(Direction.RIGHT);
+		this.checkEndGame();
 
 	}
 
@@ -71,10 +139,13 @@ public class Player extends Pawn {
 	@Override
 	public void move_up() {
 		super.move_up();
+		this.checkPurse();
+		this.checkCrystal();
 		this.setImagePath("../sprite/lorann_u.png");
 		this.loadSprite();
 		this.setSpriteIndex(0);
 		this.setDirection(Direction.UP);
+		this.checkEndGame();
 	}
 
 	/**
@@ -83,10 +154,13 @@ public class Player extends Pawn {
 	@Override
 	public void move_down() {
 		super.move_down();
+		this.checkPurse();
+		this.checkCrystal();
 		this.setImagePath("../sprite/lorann_b.png");
 		this.loadSprite();
 		this.setSpriteIndex(0);
 		this.setDirection(Direction.DOWN);
+		this.checkEndGame();
 	}
 
 	/**
@@ -96,8 +170,12 @@ public class Player extends Pawn {
 		while (true) {
 
 			// Moving the spell
-			if (!this.hasSpell() && this.getSpell().getStatus() == Status.SPELL) {
-				this.getSpell().move();
+			try {
+				if (!this.hasSpell() && this.getSpell().getStatus() == Status.SPELL) {
+					this.getSpell().move();
+				}
+			} catch (Exception e) {
+
 			}
 
 			try {
@@ -106,37 +184,46 @@ public class Player extends Pawn {
 			}
 
 		}
+
 	}
 
 	/**
-	 * Detect the collision between the spell and the enemy and the spell and the player.
+	 * Detect the collision between the spell and the enemy and the spell and the
+	 * player.
 	 * 
 	 */
 	@Override
 	public void detectCollision() throws InterruptedException {
 		while (true) {
-			if (!this.hasSpell()) {
-				if (this.getX() == this.getSpell().getX() && this.getY() == this.getSpell().getY()) {
-					Pawn.getPawns().remove(this.getSpell());
-					this.resetSpell();
-					this.setHasSpell(true);
+			try {
+				if (!this.hasSpell()) {
+					if (this.getX() == this.getSpell().getX() && this.getY() == this.getSpell().getY()) {
+						Pawn.getPawns().remove(this.getSpell());
+						this.resetSpell();
+						this.setHasSpell(true);
+					}
 				}
+			} catch (Exception e) {
+
 			}
 
 			// If a enemy touch the player
-			Iterator<Pawn> iter = Pawn.getPawns().iterator();
-			while (iter.hasNext()) {
-				Pawn i = iter.next();
-				if (this.getStatus() == Status.PLAYER) {
-					if (i.getStatus() == Status.ENEMY && this.getX() == i.getX() && this.getY() == i.getY()) {
-						Pawn.getPawns().remove(this);
-						this.kill();
-						break;
+			try {
+				Iterator<Pawn> iter = Pawn.getPawns().iterator();
+				while (iter.hasNext()) {
+					Pawn i = iter.next();
+					if (this.getStatus() == Status.PLAYER) {
+						if (i.getStatus() == Status.ENEMY && this.getX() == i.getX() && this.getY() == i.getY()) {
+							Pawn.getPawns().remove(this);
+							this.kill();
+							break;
+						}
 					}
+
 				}
+			} catch (Exception e) {
 
 			}
-
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -146,5 +233,28 @@ public class Player extends Pawn {
 
 		}
 
+	}
+
+	@Override
+	public void kill() {
+		super.kill();
+		JOptionPane.showMessageDialog(new JFrame("Error"), "Game Over !\nYour Score : " + this.getScore());
+	}
+
+	@Override
+	public void kill(boolean popup) {
+		super.kill();
+	}
+
+	public void markPoint() {
+		this.setScore(this.getScore() + this.pointPerPurse);
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 }

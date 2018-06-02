@@ -173,22 +173,27 @@ public class Enemies extends Pawn {
 	@Override
 	public void detectCollision() throws InterruptedException {
 		while (true) {
-			Iterator<Pawn> iter = Pawn.getPawns().iterator();
-			while (iter.hasNext()) {
-				Pawn i = iter.next();
-				if (this.getStatus() == Status.ENEMY) {
-					if (i.getStatus() == Status.PLAYER && !i.hasSpell() && this.getX() == i.getSpell().getX() && this.getY() == i.getSpell().getY()) {
-						this.kill();
-						Pawn.getPawns().remove(this);
-						break;
+			try {
+				Iterator<Pawn> iter = Pawn.getPawns().iterator();
+				while (iter.hasNext()) {
+					Pawn i = iter.next();
+					if (this.getStatus() == Status.ENEMY) {
+						if (i.getStatus() == Status.PLAYER && !i.hasSpell() && this.getX() == i.getSpell().getX()
+								&& this.getY() == i.getSpell().getY()) {
+							this.kill();
+							Pawn.getPawns().remove(this);
+							break;
+						}
 					}
+
 				}
 
-			}
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+				}
+			} catch (Exception e) {
 
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
 			}
 		}
 
