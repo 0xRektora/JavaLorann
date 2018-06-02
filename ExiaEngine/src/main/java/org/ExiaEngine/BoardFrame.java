@@ -18,7 +18,7 @@ public class BoardFrame extends JFrame  {
 	public static final int CASE12Y = 384;
 
 	/** The frame dimensions */
-	private Dimension frameDimensions = new Dimension(CASE20X+12, CASE12Y);
+	private Dimension frameDimensions = new Dimension(CASE20X+12, CASE12Y+128);
 
 	/** The panel component. */
 	private BoardPanel panel;

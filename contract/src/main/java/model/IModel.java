@@ -87,5 +87,9 @@ public interface IModel {
 	void setLvl(int checkSelection);
 	
 	int getLvl();
+	
+	public List<String> getMap();
+
+	public void setMap(List<String> map);
 
 }

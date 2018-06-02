@@ -84,6 +84,12 @@ public class BoardPanel extends JPanel {
 		} catch (Exception e) {
 
 		}
+		try {
+			Thread.sleep(2);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

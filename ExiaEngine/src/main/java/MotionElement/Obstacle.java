@@ -128,6 +128,7 @@ public class Obstacle {
 		this.setStatus(Status.GATE_OPEN);
 		this.setImagePath("../sprite/gate_open.png");
 		this.loadSprite();
+		System.out.println("Gate !");
 	}
 
 	/**

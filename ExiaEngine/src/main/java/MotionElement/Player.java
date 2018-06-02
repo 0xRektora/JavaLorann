@@ -79,6 +79,7 @@ public class Player extends Pawn {
 				this.hasCrystal = true;
 				
 				//A enlever après l'implémentation de la map
+				((Obstacle) tile).openGate();
 				for(Obstacle i: Obstacle.getObstacles()) {
 					if(i.getStatus() == Status.GATE_CLOSED)
 						i.openGate();
@@ -225,7 +226,7 @@ public class Player extends Pawn {
 
 			}
 			try {
-				Thread.sleep(10);
+				Thread.sleep(2);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

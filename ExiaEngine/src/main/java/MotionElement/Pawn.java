@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -239,7 +240,10 @@ public abstract class Pawn {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.RIGHT);
 			}
-			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision between the spell and a purse/gate
+			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision
+																										// between the
+																										// spell and a
+																										// purse/gate
 				this.setDirection(Direction.RIGHT);
 			}
 		} else if (this.getX() - 32 >= 0) {
@@ -273,7 +277,10 @@ public abstract class Pawn {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.LEFT);
 			}
-			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision between the spell and a purse/gate
+			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision
+																										// between the
+																										// spell and a
+																										// purse/gate
 				this.setDirection(Direction.LEFT);
 			}
 		} else if (this.getX() <= BoardFrame.CASE20X - 64) {
@@ -308,7 +315,10 @@ public abstract class Pawn {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.DOWN);
 			}
-			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision between the spell and a purse/gate
+			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision
+																										// between the
+																										// spell and a
+																										// purse/gate
 				this.setDirection(Direction.DOWN);
 			}
 		} else if (this.getY() - 32 >= 0) {
@@ -328,7 +338,13 @@ public abstract class Pawn {
 		Object tile = null;
 		try {
 			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY() + 32));
-			if (((Obstacle) tile).getStatus() == Status.GATE_CLOSED && this.getStatus() == Status.PLAYER) { // Collision between the player and the closed gate
+			if (((Obstacle) tile).getStatus() == Status.GATE_CLOSED && this.getStatus() == Status.PLAYER) { // Collision
+																											// between
+																											// the
+																											// player
+																											// and the
+																											// closed
+																											// gate
 				this.kill();
 			}
 		} catch (Exception e) {
@@ -343,10 +359,14 @@ public abstract class Pawn {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.UP);
 			}
-			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision between the spell and a purse/gate
+			if (((Obstacle) tile).getClass() == Obstacle.class && this.getStatus() == Status.SPELL) { // collision
+																										// between the
+																										// spell and a
+																										// purse/gate
 				this.setDirection(Direction.UP);
 			}
-		} else if (this.getY() <= BoardFrame.CASE12Y - 96) { // collision between the spell or the player between the border of the map
+		} else if (this.getY() <= BoardFrame.CASE12Y - 96) { // collision between the spell or the player between the
+																// border of the map
 			this.setY(this.getY() + 32);
 			// System.out.println(" This position X : " + this.getX() + "This position Y
 			// :"+this.getY() );
@@ -414,14 +434,13 @@ public abstract class Pawn {
 	 * Function to kill the pawn
 	 */
 	public void kill() {
-		this.isAlive = false;
-		if (!this.hasSpell()) { // remove the spell if it's running and the player died
+		this.setisAlive(false);
+		if (!this.hasSpell() && this.getStatus() == Status.PLAYER) { // remove the spell if it's running and the player died
 			this.setHasSpell(false);
 			Pawn.getPawns().remove(this.spell);
 			this.spell = null;
 		}
-		this.setX(0);
-		this.setY(0);
+		Pawn.getPawns().remove(this);
 
 	}
 
@@ -540,6 +559,16 @@ public abstract class Pawn {
 
 	public void addPawn() {
 		Pawn.getPawns().add(this);
+	}
+
+	public static void resetPawns() {
+		Iterator<Pawn> iter = Pawn.getPawns().iterator();
+		while (iter.hasNext()) {
+			Pawn i = iter.next();
+			if (i.getStatus() == Status.ENEMY)
+				i.kill();
+
+		}
 	}
 
 	public int getTime() {

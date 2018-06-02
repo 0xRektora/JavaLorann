@@ -121,6 +121,7 @@ public class Enemies extends Pawn {
 		while (true) {
 
 			this.playerDetect();
+			this.raycast = new ArrayList<Pawn>();
 			// Random movement
 			Random randomizer = new Random();
 			int i = randomizer.nextInt(4);
@@ -181,7 +182,6 @@ public class Enemies extends Pawn {
 						if (i.getStatus() == Status.PLAYER && !i.hasSpell() && this.getX() == i.getSpell().getX()
 								&& this.getY() == i.getSpell().getY()) {
 							this.kill();
-							Pawn.getPawns().remove(this);
 							Pawn.getPawns().remove(i.getSpell());
 							break;
 						}
@@ -190,7 +190,7 @@ public class Enemies extends Pawn {
 				}
 
 				try {
-					Thread.sleep(10);
+					Thread.sleep(2);
 				} catch (InterruptedException e) {
 				}
 			} catch (Exception e) {
@@ -241,6 +241,8 @@ public class Enemies extends Pawn {
 		}
 	}
 
+	
+	
 	/** FoV getter */
 	public int getFieldOfView() {
 		return fieldOfView;

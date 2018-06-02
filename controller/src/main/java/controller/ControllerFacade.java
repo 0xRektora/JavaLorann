@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -26,6 +25,7 @@ import model.Example;
 import model.IModel;
 import view.IView;
 
+
 /**
  * <h1>The Class ControllerFacade provides a facade of the Controller
  * component.</h1>
@@ -36,10 +36,10 @@ import view.IView;
 public class ControllerFacade implements IController {
 
 	/** The view. */
-	private final IView view;
+	private  IView view;
 
 	/** The model. */
-	private final IModel model;
+	private IModel model;
 
 	private Thread gameState = new Thread() {
 		@Override
@@ -48,7 +48,7 @@ public class ControllerFacade implements IController {
 		}
 	};
 
-	private List<String> map = new ArrayList<String>();
+	
 
 	/**
 	 * Instantiates a new controller facade.
@@ -75,11 +75,10 @@ public class ControllerFacade implements IController {
 	 */
 	public void start() throws SQLException, InterruptedException {
 		this.model.setBoardframe(new BoardFrame("Lorann"));
-		this.view.initWindow(this.model.getBoardframe());
 		this.level();
 
 	}
-	
+
 	public void level() throws InterruptedException {
 		this.chooseLevel();
 		this.drawMap(this.getModel().getLvl());
@@ -126,7 +125,13 @@ public class ControllerFacade implements IController {
 		return 1;
 	}
 
+	/**
+	 * Instantiate each object of the DB tile per tile like a bursh into the map. 
+	 * @param lvl
+	 * @throws InterruptedException
+	 */
 	public void drawMap(int lvl) throws InterruptedException {
+		System.out.println("lvl: "+ lvl);
 		lvl = lvl - 1;
 		int start = (20 * 12) * lvl;
 		int end = start + (20 * 12);
@@ -134,7 +139,7 @@ public class ControllerFacade implements IController {
 		// Load all the objects of the database into the model
 		try {
 			for (Example i : this.getModel().getMapByLvl(start, end)) {
-				this.map.add(i.getName());
+				this.getModel().getMap().add(i.getName());
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -145,7 +150,7 @@ public class ControllerFacade implements IController {
 		int x = 0;
 		int y = 0;
 
-		for (String i : this.map) {
+		for (String i : this.getModel().getMap()) {
 
 			if (x == 32 * 20) {
 				x = 0;
@@ -192,28 +197,26 @@ public class ControllerFacade implements IController {
 	}
 
 	public void resetMap() {
+		Pawn.resetPawns();
 		for (int x = 0; x < this.getModel().getBoardframe().getPan().getTile().getWidth(); x++) {
 			for (int y = 0; y < this.getModel().getBoardframe().getPan().getTile().getHeight(); y++) {
 				BoardPanel.removeObject(x * 32, y * 32);
 			}
 		}
-		for(Pawn i: Pawn.getPawns())
-		{
-			if(i.getStatus() == Status.ENEMY) {
-				Pawn.getPawns().remove(i);
-			}
-		}
+		this.getModel().setMap(new ArrayList<String>());
 		this.getModel().getPlayer().kill(false);
 	}
 
 	public void checkPlayerState() {
 		while (true) {
 			try {
+				System.out.println(Pawn.getPawns().size());
 				if (!this.getModel().getPlayer().isAlive()) {
 					this.resetMap();
-					JOptionPane.showMessageDialog(new JFrame("Error"), "Game Over !\nYour Score : " + this.getModel().getPlayer().getScore());
+					JOptionPane.showMessageDialog(new JFrame("Error"),
+							"Game Over !\nYour Score : " + this.getModel().getPlayer().getScore());
 					this.getModel().getBoardframe().dispose();
-					
+
 					try {
 						this.start();
 					} catch (InterruptedException e) {
@@ -226,7 +229,7 @@ public class ControllerFacade implements IController {
 			}
 
 			try {
-				Thread.sleep(10);
+				Thread.sleep(2);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
