@@ -27,15 +27,10 @@ public class ViewFacade implements IView {
 		
 	}
 	
+	
 	 
 	public void initWindow(BoardFrame boardframe) {
-		this.gameWindow = new Thread() {
-			@Override
-			public void run() {
-				mainWindow = boardframe;
-			}
-		};
-		this.gameWindow.start();
+		
 	}
 
 	/*

@@ -32,6 +32,9 @@ public final class ModelFacade implements IModel {
 	
 	private Obstacle gate;
 	
+	/** The map gathered from the DB.*/
+	private List<String> map = new ArrayList<String>();
+	
 	
     /**
      * Instantiates a new model facade.
@@ -121,6 +124,14 @@ public final class ModelFacade implements IModel {
 
 	public void setLvl(int lvl) {
 		this.lvl = lvl;
+	}
+
+	public List<String> getMap() {
+		return map;
+	}
+
+	public void setMap(List<String> map) {
+		this.map = map;
 	}
 
 
