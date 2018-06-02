@@ -1,11 +1,13 @@
 package model;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.ExiaEngine.BoardFrame;
 
 import MotionElement.Enemies;
+import MotionElement.Obstacle;
 import MotionElement.Player;
 import model.dao.ExampleDAO;
 /**
@@ -16,15 +18,16 @@ import model.dao.ExampleDAO;
  */
 public final class ModelFacade implements IModel {
 
+
+	
+	
 	/** Current instantance of the player*/
 	private Player player;
 	
 	/** Current instance of the window*/
 	private BoardFrame boardframe;
 	
-	/** Current instances of the enemies*/
-	private List<Enemies> enemies;
-	
+	private Obstacle gate;
 	
 	
     /**
@@ -41,8 +44,8 @@ public final class ModelFacade implements IModel {
      * @see model.IModel#getExampleById(int)
      */
     @Override
-    public Example getExampleById(final int id) throws SQLException {
-        return ExampleDAO.getExampleById(id);
+    public ArrayList<Example> getMapByLvl(final int id1, final int id2) throws SQLException {
+        return ExampleDAO.getMapByLvl(id1, id2);
     }
 
     /*
@@ -59,8 +62,8 @@ public final class ModelFacade implements IModel {
      * @see model.IModel#getAllExamples()
      */
     @Override
-    public List<Example> getAllExamples() throws SQLException {
-        return ExampleDAO.getAllExamples();
+    public List<Example> getAllmaps() throws SQLException {
+        return ExampleDAO.getAllmaps();
     }
     
     @Override
@@ -85,19 +88,29 @@ public final class ModelFacade implements IModel {
 
 	@Override
 	public void addEnemy(Enemies enemy) {
-		this.enemies.add(enemy);
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void removeEnemy(Enemies enemy) {
-		this.enemies.remove(enemy);
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public List<Enemies> getEnemies(Enemies enemy) {
-		return this.enemies;
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+	public Obstacle getGate() {
+		return gate;
+	}
+
+	public void setGate(Obstacle gate) {
+		this.gate = gate;
+	}
+
 
 }
