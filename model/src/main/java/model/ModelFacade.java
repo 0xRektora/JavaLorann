@@ -13,7 +13,7 @@ import model.dao.ExampleDAO;
 /**
  * <h1>The Class ModelFacade provides a facade of the Model component.</h1>
  *
- * @author Jean-Aymeric DIET jadiet@cesi.fr
+ * @author Jean-Aymeric DIET jadiet@cesi.fr modified by Walid Mendi
  * @version 1.0
  */
 public final class ModelFacade implements IModel {
@@ -21,8 +21,11 @@ public final class ModelFacade implements IModel {
 
 	
 	
-	/** Current instantance of the player*/
+	/** Current instance of the player*/
 	private Player player;
+	
+	/** The level selected*/
+	private int lvl;
 	
 	/** Current instance of the window*/
 	private BoardFrame boardframe;
@@ -110,6 +113,14 @@ public final class ModelFacade implements IModel {
 
 	public void setGate(Obstacle gate) {
 		this.gate = gate;
+	}
+
+	public int getLvl() {
+		return lvl;
+	}
+
+	public void setLvl(int lvl) {
+		this.lvl = lvl;
 	}
 
 
