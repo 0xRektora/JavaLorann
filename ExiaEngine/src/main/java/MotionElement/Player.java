@@ -2,12 +2,10 @@ package MotionElement;
 
 import java.util.Iterator;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import org.ExiaEngine.BoardFrame;
 import org.ExiaEngine.BoardPanel;
 import org.ExiaEngine.KeyboardControl;
+import org.ExiaEngine.ThreadsHandler;
 
 public class Player extends Pawn {
 
@@ -21,11 +19,19 @@ public class Player extends Pawn {
 	/** The score of the player */
 	private int score = 0;
 
+	public boolean getHasCrystal() {
+		return hasCrystal;
+	}
+
+	public void setHasCrystal(boolean hasCrystal) {
+		this.hasCrystal = hasCrystal;
+	}
+
 	/** Thread of the method for the spell collision detection */
-	private Thread spellChecker = new Thread() {
+	private ThreadsHandler spellChecker = new ThreadsHandler(this) {
 		@Override
-		public void run() {
-			moveSpell();
+		public void launchJob() {
+			((Player) spellChecker.gettClass()).moveSpell();
 		}
 	};
 
@@ -78,11 +84,8 @@ public class Player extends Pawn {
 				BoardPanel.removeObject(this.getX(), this.getY());
 				this.hasCrystal = true;
 				
-				//A enlever après l'implémentation de la map
-				for(Obstacle i: Obstacle.getObstacles()) {
-					if(i.getStatus() == Status.GATE_CLOSED)
-						i.openGate();
-				}
+				((Obstacle) BoardPanel.getObject(BoardPanel.gate[0], BoardPanel.gate[1])).openGate();
+				
 			}
 		} catch (Exception e) {
 		}
@@ -196,7 +199,6 @@ public class Player extends Pawn {
 	@Override
 	public void detectCollision() throws InterruptedException {
 		while (this.isAlive()) {
-			System.out.println(this.hasCrystal);
 			try {
 				if (!this.hasSpell()) {
 					if (this.getX() == this.getSpell().getX() && this.getY() == this.getSpell().getY()) {
@@ -241,12 +243,10 @@ public class Player extends Pawn {
 	@Override
 	public void kill() {
 		super.kill();
+		ThreadsHandler.removeThread(this.spellChecker);
 	}
 
-	@Override
-	public void kill(boolean popup) {
-		super.kill();
-	}
+
 
 	public void markPoint() {
 		this.setScore(this.getScore() + this.pointPerPurse);

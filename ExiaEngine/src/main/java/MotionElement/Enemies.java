@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import org.ExiaEngine.BoardPanel;
+import org.ExiaEngine.ThreadsHandler;
 
 public class Enemies extends Pawn {
 	/** A list containing the entire sprites. */
@@ -38,10 +38,10 @@ public class Enemies extends Pawn {
 	private List<Pawn> raycast = new ArrayList<Pawn>();
 
 	/** The thread for making the enemy follow a path */
-	private Thread chase = new Thread() {
+	private ThreadsHandler chase = new ThreadsHandler(this) {
 		@Override
-		public void run() {
-			movingToDest();
+		public void launchJob() {
+				((Enemies) chase.gettClass()).movingToDest();
 		}
 	};
 

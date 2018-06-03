@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 
 import org.ExiaEngine.BoardFrame;
 import org.ExiaEngine.BoardPanel;
+import org.ExiaEngine.ThreadsHandler;
 
 public abstract class Pawn {
 
@@ -60,19 +61,19 @@ public abstract class Pawn {
 	private Status status;
 
 	/** Thread of the animation */
-	private Thread animaton = new Thread() {
+	private ThreadsHandler animaton = new ThreadsHandler(this) {
 		@Override
-		public void run() {
-			animate();
+		public void launchJob() {
+			((Pawn) animaton.gettClass()).animate();
 
 		}
 	};
 
-	private Thread collision = new Thread() {
+	private ThreadsHandler collision = new ThreadsHandler(this) {
 		@Override
-		public void run() {
+		public void launchJob() {
 			try {
-				detectCollision();
+				((Pawn) collision.gettClass()).detectCollision();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -450,6 +451,8 @@ public abstract class Pawn {
 
 			}
 		}
+		ThreadsHandler.removeThread(this.collision);
+		ThreadsHandler.removeThread(this.animaton);
 		this.setX(-32);
 		this.setY(-32);
 		this.setisAlive(false);
@@ -581,6 +584,7 @@ public abstract class Pawn {
 			Pawn.getPawns().remove(i);
 		}
 		Pawn.pawns = new ArrayList<Pawn>();
+		ThreadsHandler.reset();
 	}
 
 	public int getTime() {
@@ -599,8 +603,7 @@ public abstract class Pawn {
 
 	}
 
-	public void kill(boolean popup) {
-		// TODO Auto-generated method stub
+	
 
-	}
+
 }

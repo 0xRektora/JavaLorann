@@ -22,6 +22,16 @@ public class BoardPanel extends JPanel {
 	/** The tile map 20x11 */
 	public static Object[][] map;
 
+	public static int gate[] = { 0, 0 };
+
+	public static int[] getGate() {
+		return gate;
+	}
+
+	public static void setGate(int[] gate) {
+		BoardPanel.gate = gate;
+	}
+
 	/** The map dimensions */
 	private Dimension tiles = new Dimension(20, 12);
 
@@ -29,12 +39,12 @@ public class BoardPanel extends JPanel {
 		super();
 		this.setBackground(Color.BLACK);
 		BoardPanel.map = new Object[(int) this.tiles.getWidth()][(int) this.tiles.getHeight()];
-		
 
 	}
-	
+
 	/**
 	 * Getter for the tiles dimensions
+	 * 
 	 * @return Dimension
 	 */
 	public Dimension getTile() {
@@ -52,9 +62,13 @@ public class BoardPanel extends JPanel {
 
 	public static void addObject(Object obj, int x, int y) {
 		BoardPanel.map[x / 32][y / 32] = obj;
+		if (((Obstacle) obj).getStatus() == Status.GATE_CLOSED) {
+			BoardPanel.gate[0] = x;
+			BoardPanel.gate[1] = y;
+		}
 
 	}
-	
+
 	public static void removeObject(int x, int y) {
 		BoardPanel.map[x / 32][y / 32] = null;
 	}
@@ -72,8 +86,8 @@ public class BoardPanel extends JPanel {
 						g.drawImage(temp.getSprite(), temp.getX(), temp.getY(), this);
 				}
 			}
-			
-			//Painting the pawns
+
+			// Painting the pawns
 			Iterator<Pawn> iter = Pawn.getPawns().iterator();
 			while (iter.hasNext()) {
 				Pawn i = iter.next();
@@ -92,6 +106,5 @@ public class BoardPanel extends JPanel {
 		}
 
 	}
-	
-	
+
 }

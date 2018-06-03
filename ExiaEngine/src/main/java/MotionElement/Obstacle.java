@@ -120,6 +120,7 @@ public class Obstacle {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
+	
 
 	/**
 	 * Opening the gate.

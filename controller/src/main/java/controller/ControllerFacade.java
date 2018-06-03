@@ -3,7 +3,6 @@ package controller;
 import java.awt.BorderLayout;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -15,6 +14,7 @@ import javax.swing.table.TableModel;
 
 import org.ExiaEngine.BoardFrame;
 import org.ExiaEngine.BoardPanel;
+import org.ExiaEngine.ThreadsHandler;
 
 import MotionElement.Enemies;
 import MotionElement.Obstacle;
@@ -40,10 +40,10 @@ public class ControllerFacade implements IController {
 	/** The model. */
 	private IModel model;
 
-	private Thread gameState = new Thread() {
+	private ThreadsHandler gameState = new ThreadsHandler(this) {
 		@Override
-		public void run() {
-			checkPlayerState();
+		public void launchJob() {
+			((ControllerFacade) gameState.gettClass()).checkPlayerState();
 		}
 	};
 
@@ -207,19 +207,13 @@ public class ControllerFacade implements IController {
 		while (true) {
 			try {
 
-				if (!this.getModel().getPlayer().isAlive()) {
-					this.resetMap();
-					JOptionPane.showMessageDialog(new JFrame("Error"),
-							"Game Over !\nYour Score : " + this.getModel().getPlayer().getScore());
-					// this.getModel().getBoardframe().dispose();
-
-					try {
-						this.start();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				if (!this.getModel().getPlayer().isAlive() && !this.getModel().getPlayer().getHasCrystal()) {
+					this.checkPlayerStateRedo("Game Over !\nYour Score : " );
 				}
+				else if (!this.getModel().getPlayer().isAlive() && this.getModel().getPlayer().getHasCrystal()) {
+					this.checkPlayerStateRedo("You won !\nYour Score : " );
+				}
+
 			} catch (Exception e) {
 
 			}
@@ -230,6 +224,23 @@ public class ControllerFacade implements IController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+	}
+
+	public void checkPlayerStateRedo(String message) {
+		this.resetMap();
+		JOptionPane.showMessageDialog(new JFrame("Error"),
+				message + this.getModel().getPlayer().getScore());
+		// this.getModel().getBoardframe().dispose();
+
+		try {
+			this.start();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
