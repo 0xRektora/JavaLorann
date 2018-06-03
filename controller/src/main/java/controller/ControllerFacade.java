@@ -206,12 +206,17 @@ public class ControllerFacade implements IController {
 	public void checkPlayerState() {
 		while (true) {
 			try {
-
+				
 				if (!this.getModel().getPlayer().isAlive() && !this.getModel().getPlayer().getHasCrystal()) {
 					this.checkPlayerStateRedo("Game Over !\nYour Score : " );
 				}
-				else if (!this.getModel().getPlayer().isAlive() && this.getModel().getPlayer().getHasCrystal()) {
+				else if (!this.getModel().getPlayer().isAlive() && this.getModel().getPlayer().getHasCrystal() && this.getModel().getPlayer().getX() == BoardPanel.getGate()[0] && this.getModel().getPlayer().getY() == BoardPanel.getGate()[1]) {
 					this.checkPlayerStateRedo("You won !\nYour Score : " );
+				}
+				else
+				{
+					System.out.println(this.getModel().getPlayer().getX() + " "+ this.getModel().getPlayer().getY());
+					System.out.println( BoardPanel.getGate()[0] + " " +  BoardPanel.getGate()[1]);
 				}
 
 			} catch (Exception e) {

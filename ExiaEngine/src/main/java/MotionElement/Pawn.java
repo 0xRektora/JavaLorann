@@ -229,8 +229,16 @@ public abstract class Pawn {
 	 */
 	public void move_left() {
 		Object tile = null;
+		boolean noEnemy = true;
 		try {
 			tile = ((Obstacle) BoardPanel.getObject(this.getX() - 32, this.getY()));
+			Iterator<Pawn> iter = Pawn.getPawns().iterator();
+			while(iter.hasNext()) {
+				Pawn i = iter.next();
+				if(i.getStatus() == Status.ENEMY && this.getX() - 32 == i.getX() && this.getY() == i.getY())
+					noEnemy = false;
+			}
+			
 			if (((Obstacle) tile).getStatus() == Status.GATE_CLOSED && this.getStatus() == Status.PLAYER) {
 				this.kill();
 			}
@@ -239,8 +247,15 @@ public abstract class Pawn {
 		}
 		if (tile != null) {
 			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) {
+				if(this.getStatus() == Status.ENEMY && ((Obstacle) tile).getStatus() != Status.PURSE && ((Obstacle) tile).getStatus() != Status.CRYSTAL && noEnemy == true)
+				{
+					this.setX(this.getX() - 32);
+					this.setDirection(Direction.LEFT);
+				}
+				else if(this.getStatus() == Status.PLAYER) {
 				this.setX(this.getX() - 32);
 				this.setDirection(Direction.LEFT);
+				}
 			} else {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.RIGHT);
@@ -266,8 +281,16 @@ public abstract class Pawn {
 	 */
 	public void move_right() {
 		Object tile = null;
+		boolean noEnemy = true;
 		try {
 			tile = ((Obstacle) BoardPanel.getObject(this.getX() + 32, this.getY()));
+			Iterator<Pawn> iter = Pawn.getPawns().iterator();
+			while(iter.hasNext()) {
+				Pawn i = iter.next();
+				if(i.getStatus() == Status.ENEMY && this.getX() + 32 == i.getX() && this.getY() == i.getY())
+					noEnemy = false;
+				
+			}
 			if (((Obstacle) tile).getStatus() == Status.GATE_CLOSED && this.getStatus() == Status.PLAYER) {
 				this.kill();
 			}
@@ -276,8 +299,15 @@ public abstract class Pawn {
 		}
 		if (tile != null) {
 			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) {
+				if(this.getStatus() == Status.ENEMY && ((Obstacle) tile).getStatus() != Status.PURSE && ((Obstacle) tile).getStatus() != Status.CRYSTAL && noEnemy == true)
+				{
+					this.setX(this.getX() + 32);
+					this.setDirection(Direction.RIGHT);
+				}
+				else if(this.getStatus() == Status.PLAYER) {
 				this.setX(this.getX() + 32);
 				this.setDirection(Direction.RIGHT);
+				}
 			} else {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.LEFT);
@@ -305,8 +335,18 @@ public abstract class Pawn {
 	public void move_up() {
 
 		Object tile = null;
+		boolean noEnemy = true;
 		try {
 			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY() - 32));
+			Iterator<Pawn> iter = Pawn.getPawns().iterator();
+			while(iter.hasNext()) {
+				Pawn i = iter.next();
+				if(i.getStatus() == Status.ENEMY && this.getX() == i.getX() && this.getY() -32 == i.getY()) {
+					noEnemy = false;
+				}
+				
+			}
+			
 			if (((Obstacle) tile).getStatus() == Status.GATE_CLOSED && this.getStatus() == Status.PLAYER) {
 				this.kill();
 			}
@@ -315,8 +355,15 @@ public abstract class Pawn {
 
 		if (tile != null) {
 			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) {
+				if(this.getStatus() == Status.ENEMY && ((Obstacle) tile).getStatus() != Status.PURSE && ((Obstacle) tile).getStatus() != Status.CRYSTAL && noEnemy == true)
+				{
+					this.setY(this.getY() - 32);
+					this.setDirection(Direction.UP);
+				}
+				else if(this.getStatus() == Status.PLAYER) {
 				this.setY(this.getY() - 32);
 				this.setDirection(Direction.UP);
+				}
 			} else {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.DOWN);
@@ -342,8 +389,15 @@ public abstract class Pawn {
 	 */
 	public void move_down() {
 		Object tile = null;
+		boolean noEnemy = true;
 		try {
 			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY() + 32));
+			Iterator<Pawn> iter = Pawn.getPawns().iterator();
+			while(iter.hasNext()) {
+				Pawn i = iter.next();
+				if(i.getStatus() == Status.ENEMY && this.getX() == i.getX() && this.getY() + 32 == i.getY())
+					noEnemy = false;
+			}
 			if (((Obstacle) tile).getStatus() == Status.GATE_CLOSED && this.getStatus() == Status.PLAYER) { // Collision
 																											// between
 																											// the
@@ -359,9 +413,17 @@ public abstract class Pawn {
 
 		if (tile != null) {
 			if (((Obstacle) tile).getStatus() != Status.OBSTACLE) { // collision between the spell and an obstacle
+				if(this.getStatus() == Status.ENEMY && ((Obstacle) tile).getStatus() != Status.PURSE && ((Obstacle) tile).getStatus() != Status.CRYSTAL && noEnemy == true)
+				{
+					this.setY(this.getY() + 32);
+					this.setDirection(Direction.DOWN);
+				}
+				else if(this.getStatus() == Status.PLAYER) {
 				this.setY(this.getY() + 32);
 				this.setDirection(Direction.DOWN);
-			} else {
+				}
+			} 
+			else {
 				if (this.getStatus() == Status.SPELL)
 					this.setDirection(Direction.UP);
 			}
@@ -453,8 +515,11 @@ public abstract class Pawn {
 		}
 		ThreadsHandler.removeThread(this.collision);
 		ThreadsHandler.removeThread(this.animaton);
-		this.setX(-32);
-		this.setY(-32);
+		ifn't(this.getStatus() == Status.PLAYER) {
+			this.setX(-32);
+			this.setY(-32);
+		}
+		
 		this.setisAlive(false);
 		Pawn.getPawns().remove(this);
 	}
