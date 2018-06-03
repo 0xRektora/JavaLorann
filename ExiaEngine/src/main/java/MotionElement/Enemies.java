@@ -119,47 +119,52 @@ public class Enemies extends Pawn {
 	 * Moving the pawn toward a point
 	 */
 	public void movingToDest() {
-		while (true) {
 
-			this.playerDetect();
-			this.raycast = new ArrayList<Pawn>();
-			// Random movement
-			Random randomizer = new Random();
-			int i = randomizer.nextInt(4);
-			if (i == 1) {
+		while (this.isAlive()) {
+			try {
+				this.playerDetect();
+				this.raycast = new ArrayList<Pawn>();
+				// Random movement
+				Random randomizer = new Random();
+				int i = randomizer.nextInt(4);
+				if (i == 1) {
 
-				switch (this.getDirection()) {
-				case LEFT:
-					this.move_down_left();
-					// this.setDirection(Direction.DOWN);
-					break;
-				case RIGHT:
-					this.move_up_right();
-					// this.setDirection(Direction.DOWN);
-					break;
-				default:
-					break;
+					switch (this.getDirection()) {
+					case LEFT:
+						this.move_down_left();
+						// this.setDirection(Direction.DOWN);
+						break;
+					case RIGHT:
+						this.move_up_right();
+						// this.setDirection(Direction.DOWN);
+						break;
+					default:
+						break;
+					}
+
+				} else {
+					// Trace the path
+					this.path();
 				}
 
-			} else {
-				// Trace the path
-				this.path();
+				// Reset the path if the goal is reached
+				if (this.getX() == this.destX && this.getY() == this.destY) {
+
+					this.setDest(this.tempGoalX, this.tempGoalY);
+					this.tempGoalX = this.getX();
+					this.tempGoalY = this.getY();
+
+				}
+
+				// Follow the time
+			} catch (Exception e) {
+
 			}
-
-			// Reset the path if the goal is reached
-			if (this.getX() == this.destX && this.getY() == this.destY) {
-
-				this.setDest(this.tempGoalX, this.tempGoalY);
-				this.tempGoalX = this.getX();
-				this.tempGoalY = this.getY();
-
-			}
-
-			// Follow the time
 			try {
 				Thread.sleep(this.getTime() + 150);
 			} catch (InterruptedException e) {
 			}
+
 		}
 
 	}
@@ -174,17 +179,18 @@ public class Enemies extends Pawn {
 	 */
 	@Override
 	public void detectCollision() throws InterruptedException {
-		while (true) {
+		while (this.isAlive()) {
 			try {
 				Iterator<Pawn> iter = Pawn.getPawns().iterator();
 				while (iter.hasNext()) {
 					Pawn i = iter.next();
 					if (this.getStatus() == Status.ENEMY) {
-						if (i.getStatus() == Status.PLAYER && !i.hasSpell() && this.getX() == i.getSpell().getX()
-								&& this.getY() == i.getSpell().getY()) {
+						if (i.getStatus() == Status.PLAYER && this.getX() == i.getSpell().getX()
+								&& this.getY() == i.getSpell().getY()) {							
 							this.kill();
 							Pawn.getPawns().remove(i.getSpell());
 							i.setHasSpell(true);
+							i.setCanShoot(true);
 							break;
 						}
 					}
@@ -192,7 +198,7 @@ public class Enemies extends Pawn {
 				}
 
 				try {
-					Thread.sleep(2);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 				}
 			} catch (Exception e) {
@@ -243,8 +249,6 @@ public class Enemies extends Pawn {
 		}
 	}
 
-	
-	
 	/** FoV getter */
 	public int getFieldOfView() {
 		return fieldOfView;

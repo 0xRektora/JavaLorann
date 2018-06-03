@@ -20,7 +20,6 @@ public class Spell extends Pawn {
 		this.launchCollisionDetection();
 		this.setDirection(direction);
 		this.move();
-
 	}
 
 	public void move() {

@@ -25,7 +25,6 @@ import model.Example;
 import model.IModel;
 import view.IView;
 
-
 /**
  * <h1>The Class ControllerFacade provides a facade of the Controller
  * component.</h1>
@@ -36,7 +35,7 @@ import view.IView;
 public class ControllerFacade implements IController {
 
 	/** The view. */
-	private  IView view;
+	private IView view;
 
 	/** The model. */
 	private IModel model;
@@ -48,8 +47,6 @@ public class ControllerFacade implements IController {
 		}
 	};
 
-	
-
 	/**
 	 * Instantiates a new controller facade.
 	 *
@@ -57,11 +54,13 @@ public class ControllerFacade implements IController {
 	 *            the view
 	 * @param model
 	 *            the model
+	 * @throws InterruptedException
 	 */
-	public ControllerFacade(final IView view, final IModel model) {
+	public ControllerFacade(final IView view, final IModel model) throws InterruptedException {
 		super();
 		this.model = model;
 		this.view = view;
+		this.model.setBoardframe(new BoardFrame("Lorann"));
 		this.gameState.start();
 
 	}
@@ -74,7 +73,6 @@ public class ControllerFacade implements IController {
 	 * @throws InterruptedException
 	 */
 	public void start() throws SQLException, InterruptedException {
-		this.model.setBoardframe(new BoardFrame("Lorann"));
 		this.level();
 
 	}
@@ -126,17 +124,18 @@ public class ControllerFacade implements IController {
 	}
 
 	/**
-	 * Instantiate each object of the DB tile per tile like a brush into the map. 
+	 * Instantiate each object of the DB tile per tile like a brush into the map.
+	 * 
 	 * @param lvl
 	 * @throws InterruptedException
 	 */
 	public void drawMap(int lvl) throws InterruptedException {
-		System.out.println("lvl: "+ lvl);
-		this.getModel().setMap(new ArrayList<String>());
+		System.out.println("lvl: " + lvl);
 		lvl = lvl - 1;
-		
-		int start = (this.getModel().caseX * this.getModel().caseY  ) * lvl;
+
+		int start = (this.getModel().caseX * this.getModel().caseY) * lvl;
 		int end = start + (this.getModel().caseX * this.getModel().caseY);
+		System.out.println("start : " + start + " end : " + end);
 		System.out.println(start + " " + end);
 
 		// Load all the objects of the database into the model
@@ -156,7 +155,6 @@ public class ControllerFacade implements IController {
 
 		for (String i : this.getModel().getMap()) {
 
-			
 			if (x == 32 * 20) {
 				x = 0;
 				y += 32;
@@ -164,41 +162,32 @@ public class ControllerFacade implements IController {
 			if (i.equals(this.getModel().VERTICALBONE) || i.equals("i")) {
 				this.instanciateObject(x, y, true);
 				x += 32;
-			}
-			else if (i.equals(this.getModel().HORIZONTALBONE) || i.equals("-")) {
+			} else if (i.equals(this.getModel().HORIZONTALBONE) || i.equals("-")) {
 
 				this.instanciateObject(x, y, false);
 				x += 32;
-			}
-			else if (i.equals(this.getModel().ROUNDOBSTACLE) || i.equals("b")) {
+			} else if (i.equals(this.getModel().ROUNDOBSTACLE) || i.equals("b")) {
 				this.instanciateObject(x, y, Status.OBSTACLE);
 				x += 32;
-			}
-			else if (i.equals(this.getModel().PLAYER) || i.equals("p")) {
-				this.instanciateObject(x, y, this.model.getBoardframe());
+			} else if (i.equals(this.getModel().PLAYER) || i.equals("p")) {
+				this.instanciateObject(x, y, this.getModel().getBoardframe());
 				x += 32;
-			}
-			else if (i.equals(this.getModel().MONSTER) || i.equals("m")) {
+			} else if (i.equals(this.getModel().MONSTER) || i.equals("m")) {
 				this.instanciateObject(x, y, IModel.FOV);
 				x += 32;
-			}
-			else if (i.equals(this.getModel().PURSE) || i.equals("d")) {
+			} else if (i.equals(this.getModel().PURSE) || i.equals("d")) {
 				this.instanciateObject(x, y, Status.PURSE);
 				x += 32;
-			}
-			else if (i.equals(this.getModel().CRYSTAL) || i.equals("c")) {
+			} else if (i.equals(this.getModel().CRYSTAL) || i.equals("c")) {
 				this.instanciateObject(x, y, Status.CRYSTAL);
 				x += 32;
-			}
-			else if (i.equals(this.getModel().GATE) || i.equals("g")) {
+			} else if (i.equals(this.getModel().GATE) || i.equals("g")) {
 				this.instanciateObject(x, y, Status.GATE_CLOSED);
 				x += 32;
-			}
-			else if (i.equals(this.getModel().VOID) || i.equals("v")) {
+			} else if (i.equals(this.getModel().VOID) || i.equals("v")) {
 				x += 32;
-			}
-			else {
-				x+=32;
+			} else {
+				x += 32;
 			}
 		}
 
@@ -212,17 +201,17 @@ public class ControllerFacade implements IController {
 			}
 		}
 		this.getModel().setMap(new ArrayList<String>());
-		System.out.println("Pawns : " + Pawn.getPawns().size());
 	}
 
 	public void checkPlayerState() {
 		while (true) {
 			try {
+
 				if (!this.getModel().getPlayer().isAlive()) {
 					this.resetMap();
 					JOptionPane.showMessageDialog(new JFrame("Error"),
 							"Game Over !\nYour Score : " + this.getModel().getPlayer().getScore());
-					this.getModel().getBoardframe().dispose();
+					// this.getModel().getBoardframe().dispose();
 
 					try {
 						this.start();

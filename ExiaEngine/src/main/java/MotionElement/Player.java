@@ -173,6 +173,7 @@ public class Player extends Pawn {
 			try {
 				if (!this.hasSpell() && this.getSpell().getStatus() == Status.SPELL) {
 					this.getSpell().move();
+					this.setCanShoot(false);
 				}
 			} catch (Exception e) {
 
@@ -194,13 +195,15 @@ public class Player extends Pawn {
 	 */
 	@Override
 	public void detectCollision() throws InterruptedException {
-		while (true) {
+		while (this.isAlive()) {
+			System.out.println(this.hasCrystal);
 			try {
 				if (!this.hasSpell()) {
 					if (this.getX() == this.getSpell().getX() && this.getY() == this.getSpell().getY()) {
 						Pawn.getPawns().remove(this.getSpell());
 						this.resetSpell();
 						this.setHasSpell(true);
+						this.setCanShoot(true);
 					}
 				}
 			} catch (Exception e) {
@@ -233,6 +236,7 @@ public class Player extends Pawn {
 		}
 
 	}
+	
 
 	@Override
 	public void kill() {

@@ -86,8 +86,8 @@ public abstract class Pawn {
 		this.setY(0);
 		this.isAlive = true;
 		this.addPawn();
-		System.out.println("Instantiate : " + this.getStatus());
 		
+
 	}
 
 	Pawn(int x, int y) {
@@ -96,7 +96,7 @@ public abstract class Pawn {
 		this.isAlive = true;
 		this.lastTimer = System.currentTimeMillis();
 		this.addPawn();
-		System.out.println("Instantiate : " + this.getStatus());
+		
 
 	}
 
@@ -145,6 +145,7 @@ public abstract class Pawn {
 				break;
 			}
 			this.haveSpell = false;
+			this.setCanShoot(false);
 
 		}
 
@@ -439,17 +440,20 @@ public abstract class Pawn {
 	 */
 	public void kill() {
 		System.out.println("Pawn : " + this.getStatus() + " killed");
-		if (!this.hasSpell() && this.getStatus() == Status.PLAYER && !this.isAlive()) { // remove the spell if it's
-																						// running and the player died
-			this.setHasSpell(false);
-			Pawn.getPawns().remove(this.spell);
-			this.spell = null;
+		if (this.getStatus() == Status.PLAYER && !this.isAlive()) { // remove the spell if it's running and the player died
+			try {
+				this.spell.setisAlive(false);
+				this.setHasSpell(false);
+				Pawn.getPawns().remove(this.spell);
+				this.spell = null;
+			} catch (Exception e) {
+
+			}
 		}
 		this.setX(-32);
 		this.setY(-32);
 		this.setisAlive(false);
 		Pawn.getPawns().remove(this);
-
 	}
 
 	/**
@@ -496,7 +500,7 @@ public abstract class Pawn {
 	 * The animation function of each pawn.
 	 */
 	public void animate() {
-		while (true) {
+		while (this.isAlive()) {
 			if (this.spriteIndex >= this.assets.size())
 				this.spriteIndex = 0;
 
@@ -574,7 +578,7 @@ public abstract class Pawn {
 		while (iter.hasNext()) {
 			Pawn i = iter.next();
 			i.kill();
-
+			Pawn.getPawns().remove(i);
 		}
 		Pawn.pawns = new ArrayList<Pawn>();
 	}
@@ -582,17 +586,17 @@ public abstract class Pawn {
 	public int getTime() {
 		return time;
 	}
-	
+
 	public static Pawn getPlayer() {
 		Iterator<Pawn> iter = Pawn.getPawns().iterator();
 		Pawn player = null;
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			Pawn i = iter.next();
-			if(i.getStatus() == Status.PLAYER)
+			if (i.getStatus() == Status.PLAYER)
 				player = i;
 		}
 		return player;
-		
+
 	}
 
 	public void kill(boolean popup) {

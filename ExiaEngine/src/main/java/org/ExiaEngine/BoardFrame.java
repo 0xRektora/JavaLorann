@@ -11,7 +11,7 @@ public class BoardFrame extends JFrame  {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;      
 	
 	public static final int CASE20X = 640;
 	
