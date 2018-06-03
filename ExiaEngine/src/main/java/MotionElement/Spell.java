@@ -34,7 +34,6 @@ public class Spell extends Pawn {
 
 			this.move_right();
 		} else if (this.getDirection() == Direction.LEFT) {
-
 			this.move_left();
 		}
 

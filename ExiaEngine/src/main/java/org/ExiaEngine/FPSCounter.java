@@ -18,7 +18,7 @@ class FPSCounter extends Thread {
 			fps = 1000000000.0 / (System.nanoTime() - lastTime); // one second(nano) divided by amount of time it takes
 																	// for one frame to finish
 			lastTime = System.nanoTime();
-			System.out.println(this.getFps());
+			//System.out.println(this.getFps());
 		}
 	}
 

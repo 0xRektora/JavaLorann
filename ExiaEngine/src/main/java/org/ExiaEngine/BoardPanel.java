@@ -19,11 +19,11 @@ public class BoardPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/** The tile map 20x12 */
+	/** The tile map 20x11 */
 	public static Object[][] map;
 
 	/** The map dimensions */
-	private Dimension tiles = new Dimension(BoardFrame.CASE20X / 32, BoardFrame.CASE12Y / 32);
+	private Dimension tiles = new Dimension(20, 12);
 
 	BoardPanel() throws InterruptedException {
 		super();
@@ -82,7 +82,7 @@ public class BoardPanel extends JPanel {
 
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 		try {
 			Thread.sleep(2);
@@ -92,5 +92,6 @@ public class BoardPanel extends JPanel {
 		}
 
 	}
-
+	
+	
 }

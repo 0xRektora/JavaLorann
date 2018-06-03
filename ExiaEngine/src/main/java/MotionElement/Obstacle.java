@@ -36,18 +36,18 @@ public class Obstacle {
 		this.setX(x);
 		this.setY(y);
 		this.setStatus(status);
-		if(this.getStatus() == Status.CRYSTAL)
+		if (this.getStatus() == Status.CRYSTAL)
 			this.setImagePath("../sprite/crystal_ball.png");
-		else if(this.getStatus() == Status.PURSE)
+		else if (this.getStatus() == Status.PURSE)
 			this.setImagePath("../sprite/purse.png");
-		else if(this.getStatus() == Status.GATE_CLOSED)
+		else if (this.getStatus() == Status.GATE_CLOSED)
 			this.setImagePath("../sprite/gate_closed.png");
-		else if(this.getStatus() == Status.OBSTACLE)
+		else if (this.getStatus() == Status.OBSTACLE)
 			this.setImagePath("../sprite/bone.png");
-		
+
 		this.loadSprite();
 		BoardPanel.addObject(this, this.getX(), this.getY());
-		
+
 	}
 
 	public Obstacle(int x, int y, boolean isVerticalBone) {
@@ -120,10 +120,10 @@ public class Obstacle {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
-	
-	/** 
+
+	/**
 	 * Opening the gate.
-	 * */
+	 */
 	public void openGate() {
 		this.setStatus(Status.GATE_OPEN);
 		this.setImagePath("../sprite/gate_open.png");
@@ -133,8 +133,8 @@ public class Obstacle {
 
 	/**
 	 * Getter for the static list of the obstacles
-	 * @return List<Obstacle>
-	 * 		The list of all the obstacles objects.
+	 * 
+	 * @return List<Obstacle> The list of all the obstacles objects.
 	 */
 	public static List<Obstacle> getObstacles() {
 		return Obstacle.obstacles;

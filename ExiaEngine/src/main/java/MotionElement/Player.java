@@ -79,7 +79,6 @@ public class Player extends Pawn {
 				this.hasCrystal = true;
 				
 				//A enlever après l'implémentation de la map
-				((Obstacle) tile).openGate();
 				for(Obstacle i: Obstacle.getObstacles()) {
 					if(i.getStatus() == Status.GATE_CLOSED)
 						i.openGate();
@@ -189,7 +188,7 @@ public class Player extends Pawn {
 	}
 
 	/**
-	 * Detect the collision between the spell and the enemy and the spell and the
+	 * Detect the collision between the spell and the enemy , the spell and the
 	 * player.
 	 * 
 	 */
@@ -215,7 +214,6 @@ public class Player extends Pawn {
 					Pawn i = iter.next();
 					if (this.getStatus() == Status.PLAYER) {
 						if (i.getStatus() == Status.ENEMY && this.getX() == i.getX() && this.getY() == i.getY()) {
-							Pawn.getPawns().remove(this);
 							this.kill();
 							break;
 						}

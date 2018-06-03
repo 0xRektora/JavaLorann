@@ -86,6 +86,8 @@ public abstract class Pawn {
 		this.setY(0);
 		this.isAlive = true;
 		this.addPawn();
+		System.out.println("Instantiate : " + this.getStatus());
+		
 	}
 
 	Pawn(int x, int y) {
@@ -94,6 +96,7 @@ public abstract class Pawn {
 		this.isAlive = true;
 		this.lastTimer = System.currentTimeMillis();
 		this.addPawn();
+		System.out.println("Instantiate : " + this.getStatus());
 
 	}
 
@@ -298,6 +301,7 @@ public abstract class Pawn {
 	 * Function to move up the pawn, 32px is the size of the sprite.
 	 */
 	public void move_up() {
+
 		Object tile = null;
 		try {
 			tile = ((Obstacle) BoardPanel.getObject(this.getX(), this.getY() - 32));
@@ -434,12 +438,16 @@ public abstract class Pawn {
 	 * Function to kill the pawn
 	 */
 	public void kill() {
-		this.setisAlive(false);
-		if (!this.hasSpell() && this.getStatus() == Status.PLAYER) { // remove the spell if it's running and the player died
+		System.out.println("Pawn : " + this.getStatus() + " killed");
+		if (!this.hasSpell() && this.getStatus() == Status.PLAYER && !this.isAlive()) { // remove the spell if it's
+																						// running and the player died
 			this.setHasSpell(false);
 			Pawn.getPawns().remove(this.spell);
 			this.spell = null;
 		}
+		this.setX(-32);
+		this.setY(-32);
+		this.setisAlive(false);
 		Pawn.getPawns().remove(this);
 
 	}
@@ -565,14 +573,26 @@ public abstract class Pawn {
 		Iterator<Pawn> iter = Pawn.getPawns().iterator();
 		while (iter.hasNext()) {
 			Pawn i = iter.next();
-			if (i.getStatus() == Status.ENEMY)
-				i.kill();
+			i.kill();
 
 		}
+		Pawn.pawns = new ArrayList<Pawn>();
 	}
 
 	public int getTime() {
 		return time;
+	}
+	
+	public static Pawn getPlayer() {
+		Iterator<Pawn> iter = Pawn.getPawns().iterator();
+		Pawn player = null;
+		while(iter.hasNext()) {
+			Pawn i = iter.next();
+			if(i.getStatus() == Status.PLAYER)
+				player = i;
+		}
+		return player;
+		
 	}
 
 	public void kill(boolean popup) {

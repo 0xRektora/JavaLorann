@@ -51,6 +51,7 @@ public class Enemies extends Pawn {
 	 * @throws InterruptedException
 	 */
 	public Enemies() throws InterruptedException {
+		super();
 		this.setStatus(Status.ENEMY);
 		this.addSprite();
 		this.randomSprite();
@@ -183,6 +184,7 @@ public class Enemies extends Pawn {
 								&& this.getY() == i.getSpell().getY()) {
 							this.kill();
 							Pawn.getPawns().remove(i.getSpell());
+							i.setHasSpell(true);
 							break;
 						}
 					}

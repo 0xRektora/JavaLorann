@@ -18,26 +18,32 @@ import MotionElement.Player;
 public interface IModel {
 
 	/** Char set of the vertical bone*/
-	public final String VERTICALBONE = "I";
+	public static final String VERTICALBONE = "I";
 	
 	/** Char set of the horizontal bone*/
-	public final String HORIZONTALBONE = "-";
+	public static final String HORIZONTALBONE = "-";
 	
-	public final String ROUNDOBSTACLE = "B";
+	public static final String ROUNDOBSTACLE = "B";
 	
-	public final String PLAYER = "P";
+	public static final String PLAYER = "P";
 	
-	public final String MONSTER = "M";
+	public static final String MONSTER = "M";
 	
-	public final String PURSE = "D";
+	public static final String PURSE = "D";
 	
-	public final String CRYSTAL = "C";
+	public static final String CRYSTAL = "C";
 	
-	public final String VOID = "V";
+	public static final String VOID = "V";
 	
-	public final String GATE = "G";
+	public static final String GATE = "G";
 	
-	public final int FOV = 3;
+	public static final int FOV = 3;
+	
+	/** Number of tiles in the X axis*/
+	public static final int caseX = 20;
+	
+	/** Number of tiles in the Y axis*/
+	public static final int caseY = 12;
 	
     /**
      * Gets the example by id.
