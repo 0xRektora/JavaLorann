@@ -70,7 +70,7 @@ public class ControllerFacade implements IController {
 		this.view = view;
 		this.model.setBoardframe(new BoardFrame("Lorann"));
 		this.gameState.start();
-		BoardFrame.playSound(this.getModel().mainSound, 50);
+		//BoardFrame.playSound(this.getModel().mainSound, 50);
 		
 		
 
