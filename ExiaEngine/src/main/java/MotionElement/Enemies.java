@@ -41,7 +41,7 @@ public class Enemies extends Pawn {
 	private ThreadsHandler chase = new ThreadsHandler(this) {
 		@Override
 		public void launchJob() {
-				((Enemies) chase.gettClass()).movingToDest();
+			((Enemies) chase.gettClass()).movingToDest();
 		}
 	};
 
@@ -186,7 +186,7 @@ public class Enemies extends Pawn {
 					Pawn i = iter.next();
 					if (this.getStatus() == Status.ENEMY) {
 						if (i.getStatus() == Status.PLAYER && this.getX() == i.getSpell().getX()
-								&& this.getY() == i.getSpell().getY()) {							
+								&& this.getY() == i.getSpell().getY()) {
 							this.kill();
 							Pawn.getPawns().remove(i.getSpell());
 							i.setHasSpell(true);
@@ -247,6 +247,12 @@ public class Enemies extends Pawn {
 			}
 
 		}
+	}
+
+	@Override
+	public void kill() {
+		super.kill();
+		ThreadsHandler.removeThread(this.chase);
 	}
 
 	/** FoV getter */

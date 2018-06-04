@@ -7,7 +7,6 @@ import java.util.Iterator;
 
 import javax.swing.JPanel;
 
-import MotionElement.Enemies;
 import MotionElement.Obstacle;
 import MotionElement.Pawn;
 import MotionElement.Status;
@@ -88,12 +87,16 @@ public class BoardPanel extends JPanel {
 			}
 
 			// Painting the pawns
-			Iterator<Pawn> iter = Pawn.getPawns().iterator();
-			while (iter.hasNext()) {
-				Pawn i = iter.next();
-				if (i.isAlive())
-					g.drawImage(i.getSprite(), i.getX(), i.getY(), this);
+			try {
+				Iterator<Pawn> iter = Pawn.getPawns().iterator();
+				while (iter.hasNext()) {
+					Pawn i = iter.next();
+					if (i.isAlive())
+						g.drawImage(i.getSprite(), i.getX(), i.getY(), this);
 
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -13,7 +13,7 @@ public class Player extends Pawn {
 	private KeyboardControl kbControll = new KeyboardControl(this);
 
 	private final int pointPerPurse = 200;
-	
+
 	private boolean hasCrystal = false;
 
 	/** The score of the player */
@@ -51,7 +51,6 @@ public class Player extends Pawn {
 		frame.addKeyListener(this.kbControll);
 		this.setCanShoot(true);
 		this.spellChecker.start();
-		
 
 	}
 
@@ -70,7 +69,7 @@ public class Player extends Pawn {
 		} catch (Exception e) {
 		}
 	}
-	
+
 	/**
 	 * Check if the player got the crystal
 	 */
@@ -83,14 +82,14 @@ public class Player extends Pawn {
 				Obstacle.getObstacles().remove(tile);
 				BoardPanel.removeObject(this.getX(), this.getY());
 				this.hasCrystal = true;
-				
+
 				((Obstacle) BoardPanel.getObject(BoardPanel.gate[0], BoardPanel.gate[1])).openGate();
-				
+
 			}
 		} catch (Exception e) {
 		}
 	}
-	
+
 	public void checkEndGame() {
 		Object tile = null;
 		try {
@@ -238,15 +237,12 @@ public class Player extends Pawn {
 		}
 
 	}
-	
 
 	@Override
 	public void kill() {
 		super.kill();
 		ThreadsHandler.removeThread(this.spellChecker);
 	}
-
-
 
 	public void markPoint() {
 		this.setScore(this.getScore() + this.pointPerPurse);

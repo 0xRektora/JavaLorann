@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import MotionElement.Pawn;
-import MotionElement.Player;
 
 public class KeyboardControl implements KeyListener {
 

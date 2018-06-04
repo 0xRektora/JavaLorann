@@ -10,17 +10,17 @@ import org.ExiaEngine.BoardFrame;
  */
 public interface IView {
 
-    /**
-     * Display message.
-     *
-     * @param message
-     *            the message
-     */
-    void displayMessage(String message);
-    
-    public BoardFrame getMainWindow();
+	/**
+	 * Display message.
+	 *
+	 * @param message
+	 *            the message
+	 */
+	void displayMessage(String message);
+
+	public BoardFrame getMainWindow();
 
 	public void setMainWindow(BoardFrame mainWindow);
-	
+
 	public void initWindow(BoardFrame boardframe);
 }

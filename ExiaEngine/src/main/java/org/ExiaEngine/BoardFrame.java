@@ -4,45 +4,41 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import MotionElement.Player;
-
-public class BoardFrame extends JFrame  {
+public class BoardFrame extends JFrame {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;      
-	
+	private static final long serialVersionUID = 1L;
+
 	public static final int CASE20X = 640;
-	
+
 	public static final int CASE12Y = 384;
 
 	/** The frame dimensions */
-	private Dimension frameDimensions = new Dimension(CASE20X+12, CASE12Y+128);
+	private Dimension frameDimensions = new Dimension(CASE20X + 12, CASE12Y + 128);
 
 	/** The panel component. */
 	private BoardPanel panel;
-	
+
 	/** FPS counter */
 	private FPSCounter fpscounter;
-	
-	/** Repaint the panel*/
+
+	/** Repaint the panel */
 	private Thread paintWindow = new Thread() {
 		@Override
 		public void run() {
-			while(true)
+			while (true)
 				panel.repaint();
 		}
 	};
-	
-	
-	
+
 	/**
 	 * Constructor of the BoardFrame class.
 	 * 
 	 * @param title
 	 *            the title of the window.
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
 	public BoardFrame(String title) throws InterruptedException {
 		super();
@@ -57,9 +53,7 @@ public class BoardFrame extends JFrame  {
 		this.paintWindow.start();
 		this.fpscounter = new FPSCounter();
 		this.fpscounter.start();
-		
-		
-		
+
 	}
 
 	/**
@@ -71,11 +65,11 @@ public class BoardFrame extends JFrame  {
 	public void setPan(BoardPanel panel) {
 		this.panel = panel;
 	}
-	
+
 	/**
 	 * Getter for the frame panel.
-	 * @return BoardPanel
-	 * 		The panel currently used by the BoardFrame.
+	 * 
+	 * @return BoardPanel The panel currently used by the BoardFrame.
 	 */
 	public BoardPanel getPan() {
 		return this.panel;
@@ -84,7 +78,5 @@ public class BoardFrame extends JFrame  {
 	public Dimension getDimensions() {
 		return this.frameDimensions;
 	}
-
-	
 
 }

@@ -2,8 +2,6 @@ package MotionElement;
 
 public class Spell extends Pawn {
 
-	private final int speed = 300;
-	
 	public Spell() {
 		// TODO Auto-generated constructor stub
 	}
