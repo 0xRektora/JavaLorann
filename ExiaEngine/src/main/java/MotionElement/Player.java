@@ -65,7 +65,7 @@ public class Player extends Pawn {
 				this.markPoint();
 				Obstacle.getObstacles().remove(tile);
 				BoardPanel.removeObject(this.getX(), this.getY());
-				BoardFrame.playSound("../data/purse.wav", 5);
+				BoardFrame.playSound("../data/purse.wav", 0.3);
 			}
 		} catch (Exception e) {
 		}
@@ -85,7 +85,7 @@ public class Player extends Pawn {
 				this.hasCrystal = true;
 
 				((Obstacle) BoardPanel.getObject(BoardPanel.gate[0], BoardPanel.gate[1])).openGate();
-				BoardFrame.playSound("../data/gate.wav", 5);
+				BoardFrame.playSound("../data/gate.wav", 0.3);
 
 			}
 		} catch (Exception e) {

@@ -141,7 +141,7 @@ public abstract class Pawn {
 			}
 			this.haveSpell = false;
 			this.setCanShoot(false);
-			BoardFrame.playSound("../data/spell.wav", 5);
+			BoardFrame.playSound("../data/spell.wav", 0.3);
 
 		}
 
@@ -531,7 +531,7 @@ public abstract class Pawn {
 			this.setY(-32);
 		}
 		else {
-			BoardFrame.playSound("../data/die.wav", 2);
+			BoardFrame.playSound("../data/die.wav", 0.3);
 		}
 
 		this.setisAlive(false);

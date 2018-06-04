@@ -189,7 +189,7 @@ public class Enemies extends Pawn {
 						if (i.getStatus() == Status.PLAYER && this.getX() == i.getSpell().getX()
 								&& this.getY() == i.getSpell().getY()) {
 							this.kill();
-							BoardFrame.playSound("../data/monstreDie.wav", 5);
+							BoardFrame.playSound("../data/monstreDie.wav", 0.3);
 							Pawn.getPawns().remove(i.getSpell());
 							i.setHasSpell(true);
 							i.setCanShoot(true);
