@@ -15,6 +15,9 @@ import org.ExiaEngine.BoardFrame;
 import org.ExiaEngine.BoardPanel;
 import org.ExiaEngine.ThreadsHandler;
 
+
+
+
 public abstract class Pawn {
 
 	/** The list of all pawns */
@@ -138,6 +141,7 @@ public abstract class Pawn {
 			}
 			this.haveSpell = false;
 			this.setCanShoot(false);
+			BoardFrame.playSound("../data/spell.wav", 5);
 
 		}
 
@@ -517,7 +521,7 @@ public abstract class Pawn {
 				Pawn.getPawns().remove(this.spell);
 				this.spell = null;
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 		}
 		ThreadsHandler.removeThread(this.collision);
@@ -525,6 +529,9 @@ public abstract class Pawn {
 		if (this.getStatus() != Status.PLAYER) {
 			this.setX(-32);
 			this.setY(-32);
+		}
+		else {
+			BoardFrame.playSound("../data/die.wav", 2);
 		}
 
 		this.setisAlive(false);

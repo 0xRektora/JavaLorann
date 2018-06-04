@@ -1,9 +1,17 @@
 package controller;
 
 import java.awt.BorderLayout;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -62,6 +70,9 @@ public class ControllerFacade implements IController {
 		this.view = view;
 		this.model.setBoardframe(new BoardFrame("Lorann"));
 		this.gameState.start();
+		BoardFrame.playSound(this.getModel().mainSound, 50);
+		
+		
 
 	}
 
@@ -315,4 +326,6 @@ public class ControllerFacade implements IController {
 	public IModel getModel() {
 		return this.model;
 	}
+	
+	
 }

@@ -44,6 +44,9 @@ public interface IModel {
 
 	/** Number of tiles in the Y axis */
 	public static final int caseY = 12;
+	
+	/** Main path sound of the game*/
+	public static final String mainSound = "../data/mainSound.mid";
 
 	/**
 	 * Gets the example by id.

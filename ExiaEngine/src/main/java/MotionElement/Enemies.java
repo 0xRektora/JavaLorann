@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import org.ExiaEngine.BoardFrame;
 import org.ExiaEngine.ThreadsHandler;
 
 public class Enemies extends Pawn {
@@ -188,6 +189,7 @@ public class Enemies extends Pawn {
 						if (i.getStatus() == Status.PLAYER && this.getX() == i.getSpell().getX()
 								&& this.getY() == i.getSpell().getY()) {
 							this.kill();
+							BoardFrame.playSound("../data/monstreDie.wav", 5);
 							Pawn.getPawns().remove(i.getSpell());
 							i.setHasSpell(true);
 							i.setCanShoot(true);
@@ -215,7 +217,6 @@ public class Enemies extends Pawn {
 			for (int y = (this.getY() - (32 * this.getFieldOfView())); y <= this.getY()
 					+ (this.getFieldOfView() * 32); y += 32) {
 				this.scanArea(x, y);
-
 			}
 		}
 

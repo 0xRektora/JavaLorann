@@ -65,6 +65,7 @@ public class Player extends Pawn {
 				this.markPoint();
 				Obstacle.getObstacles().remove(tile);
 				BoardPanel.removeObject(this.getX(), this.getY());
+				BoardFrame.playSound("../data/purse.wav", 5);
 			}
 		} catch (Exception e) {
 		}
@@ -84,6 +85,7 @@ public class Player extends Pawn {
 				this.hasCrystal = true;
 
 				((Obstacle) BoardPanel.getObject(BoardPanel.gate[0], BoardPanel.gate[1])).openGate();
+				BoardFrame.playSound("../data/gate.wav", 5);
 
 			}
 		} catch (Exception e) {
@@ -211,7 +213,7 @@ public class Player extends Pawn {
 
 			}
 
-			// If a enemy touch the player
+			// If an enemy touches the player
 			try {
 				Iterator<Pawn> iter = Pawn.getPawns().iterator();
 				while (iter.hasNext()) {
