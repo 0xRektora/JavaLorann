@@ -14,7 +14,7 @@ import MotionElement.Player;
  */
 public class ViewFacade implements IView {
 
-	private  BoardFrame mainWindow;
+	private BoardFrame mainWindow;
 
 	private Thread gameWindow;
 
@@ -23,14 +23,11 @@ public class ViewFacade implements IView {
 	 */
 	public ViewFacade() {
 		super();
-		
-		
+
 	}
-	
-	
-	 
+
 	public void initWindow(BoardFrame boardframe) {
-		
+
 	}
 
 	/*
