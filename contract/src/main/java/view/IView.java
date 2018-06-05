@@ -2,6 +2,11 @@ package view;
 
 import org.ExiaEngine.BoardFrame;
 
+import controller.IController;
+import model.IModel;
+
+
+
 /**
  * <h1>The Interface IView.</h1>
  *
@@ -23,4 +28,12 @@ public interface IView {
 	public void setMainWindow(BoardFrame mainWindow);
 
 	public void initWindow(BoardFrame boardframe);
+
+	public void chooseLevel(IModel model);
+
+	void drawMap(int lvl, IModel model ,IController controller) throws InterruptedException;
+
+	void resetMap(IModel model);
+
+	void writeScore(IModel model);
 }

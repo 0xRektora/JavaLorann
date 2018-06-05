@@ -32,13 +32,25 @@ public class BoardFrame extends JFrame {
 	/** FPS counter */
 	private FPSCounter fpscounter;
 
+	public FPSCounter getFpscounter() {
+		return fpscounter;
+	}
+
+	public void setFpscounter(FPSCounter fpscounter) {
+		this.fpscounter = fpscounter;
+	}
+
 	/** Repaint the panel */
-	private Thread paintWindow = new Thread() {
+	private ThreadsHandler paintWindow = new ThreadsHandler(this) {
 		@Override
-		public void run() {
-			while (true)
-				panel.repaint();
+		public void launchJob() {
+			while(true) {
+				((BoardFrame)this.gettClass()).repaint();
+				((BoardFrame)this.gettClass()).setTitle("Lorann " + ((BoardFrame)this.gettClass()).getFpscounter().getFps());
+			}
 		}
+				
+		
 	};
 
 	/**
@@ -61,7 +73,7 @@ public class BoardFrame extends JFrame {
 		this.paintWindow.start();
 		this.fpscounter = new FPSCounter();
 		this.fpscounter.start();
-
+		
 	}
 
 	/**

@@ -15,9 +15,6 @@ import org.ExiaEngine.BoardFrame;
 import org.ExiaEngine.BoardPanel;
 import org.ExiaEngine.ThreadsHandler;
 
-
-
-
 public abstract class Pawn {
 
 	/** The list of all pawns */
@@ -529,14 +526,15 @@ public abstract class Pawn {
 		if (this.getStatus() != Status.PLAYER) {
 			this.setX(-32);
 			this.setY(-32);
-		}
-		else {
+		} else {
 			BoardFrame.playSound("../data/die.wav", 0.3);
 		}
 
 		this.setisAlive(false);
 		Pawn.getPawns().remove(this);
 	}
+
+	
 
 	/**
 	 * Set the image path of the pawn.

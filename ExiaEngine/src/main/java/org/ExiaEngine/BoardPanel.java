@@ -2,9 +2,11 @@ package org.ExiaEngine;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.Iterator;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import MotionElement.Obstacle;
@@ -21,6 +23,8 @@ public class BoardPanel extends JPanel {
 	/** The tile map 20x11 */
 	public static Object[][] map;
 
+	private JLabel dashBoard;
+
 	public static int gate[] = { 0, 0 };
 
 	public static int[] getGate() {
@@ -31,14 +35,28 @@ public class BoardPanel extends JPanel {
 		BoardPanel.gate = gate;
 	}
 
+	public JLabel getDashBoard() {
+		return dashBoard;
+	}
+
+	public void setDashBoard(JLabel dashBoard) {
+		this.dashBoard = dashBoard;
+	}
+
 	/** The map dimensions */
 	private Dimension tiles = new Dimension(20, 12);
 
 	BoardPanel() throws InterruptedException {
 		super();
+		this.setLayout(null);
 		this.setBackground(Color.BLACK);
 		BoardPanel.map = new Object[(int) this.tiles.getWidth()][(int) this.tiles.getHeight()];
-
+		this.dashBoard = new JLabel("DashBoard");
+		this.dashBoard.setBounds(40, BoardFrame.CASE12Y + 20, BoardFrame.CASE20X, 64);
+		this.dashBoard.setForeground(Color.yellow);
+		this.dashBoard.setFont(new Font("Lucida Console", 15,15));
+		this.add(dashBoard);
+		this.writeScore(0);
 	}
 
 	/**
@@ -110,4 +128,8 @@ public class BoardPanel extends JPanel {
 
 	}
 
+	public void writeScore(int score) {
+		this.dashBoard
+				.setText("Score : " + score + " Move up : ↑" + " Move down : ↓" + " Move right: →" + " Move left : ←");
+	}
 }

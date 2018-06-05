@@ -248,6 +248,7 @@ public class Player extends Pawn {
 
 	public void markPoint() {
 		this.setScore(this.getScore() + this.pointPerPurse);
+		
 	}
 
 	public int getScore() {
